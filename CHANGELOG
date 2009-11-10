@@ -1,0 +1,22 @@
+Dropbox Screen Grabber 1.3 - (05.11.2009)
+
+ * Fixed a bug which caused the wrong public file URL to be saved to the clipboard if user has set the custom screenshot save directory
+ 
+Dropbox Screen Grabber 1.2 - (27.10.2009)
+
+ * User can choose arbitrary folder inside Dropbox public folder where the screenshots are saved
+ * Simple update check system, which allows you to check if there is a new version available
+ * Other minor fixes
+
+Dropbox Screen Grabber 1.1 - (24.10.2009)
+
+ * Only one instance of the program is allowed to run
+ * System wide hot-keys can be customized
+ * Automatic public file URL copying to clipboard after taking the screenshot can be enabled or disabled
+ * Add system-tray menu icons
+ * New application icon
+ * Other minor code improvements
+
+Dropbox Screen Grabber 1.0 (20.10.2009)
+
+ * Initial release
