@@ -11,6 +11,7 @@ settings = {
             'copyUrlToClipboard': '0',
             'userId': '',
             'enableToastNotifications': '1',
+            'imageFormat': 'PNG',
             'screenshotSaveDirectory': '',
             'hotKey1Modifier': 'Shift',
             'hotKey1KeyCode': 'F10',
@@ -37,6 +38,7 @@ def loadSettings():
     settings['copyUrlToClipboard'] = config.Read('copy_url_to_clipboard', '0')
     settings['userId'] = config.Read('user_id', '')
     settings['enableToastNotifications'] = config.Read('enable_toast_notifications', '1')
+    settings['imageFormat'] = config.Read('image_format', 'PNG')
     
     settings['screenshotSaveDirectory'] = config.Read('screenshot_save_directory', '')
     
@@ -51,10 +53,11 @@ def saveSettings(settings):
     config.Write('copy_url_to_clipboard', '1' if settings['copyUrlToClipboard'] else '0')
     config.Write('user_id', str(settings['userId']))
     config.Write('enable_toast_notifications', '1' if settings['enableToastNotifications'] == True else '0')
+    config.Write('image_format', str(settings['imageFormat']))
     
     saveDirectory = settings['screenshotSaveDirectory']
     saveDirectory = saveDirectory[len(screengrab.publicFolderPath) + 1:] if saveDirectory.find(screengrab.publicFolderPath) != -1 and len(saveDirectory) > len(screengrab.publicFolderPath) else None
-    config.Write('screenshot_save_directory', saveDirectory if saveDirectory != None else '') # only path relative to Dropbox public directory is saved
+    config.Write('screenshot_save_directory', saveDirectory if saveDirectory != None else '') # only path relative to Dropbox public directory is allowed
     
     config.Write('hot_key1_modifier', str(settings['hotKey1Modifier']))
     config.Write('hot_key1_key_code', str(settings['hotKey1KeyCode']))

@@ -4,7 +4,7 @@
 # Description: Simple application for capturing screenshots of the whole desktop or
 # the currently active window and saving it to the Dropbox public folder.
 # Author: Tomaž Muraus (http://www.tomaz-muraus.info)
-# Version: 1.3
+# Version: 1.4
 # License: GPL
 
 # Requirements:
@@ -22,7 +22,7 @@
 # - Steve H. for making PythonScriptToDisplayConfig script which reads the Dropbox configuration data (http://wiki.getdropbox.com/DropboxAddons/PythonScriptToDisplayConfig)
 # - Dropbox team for making the best syncing tool
 
-__version__ = "1.3"
+__version__ = "1.4"
 
 import os
 import sys
@@ -147,7 +147,12 @@ Available hot-keys:
                 userId = settingsDialog.userIdField.GetValue()
                 copyUrlToClipboard = settingsDialog.copyUrlToClipboardCheckBox.GetValue() if userId != '' else False
                 
-                settings.saveSettings({'copyUrlToClipboard': copyUrlToClipboard, 'userId': settingsDialog.userIdField.GetValue(), 'enableToastNotifications': settingsDialog.notificationCheckbox.GetValue(), 'screenshotSaveDirectory': settingsDialog.screenshotSaveLocation.GetValue(), 'hotKey1Modifier': settingsDialog.hotKey1Modifier.GetValue(), 'hotKey1KeyCode': settingsDialog.hotKey1KeyCode.GetValue(), 'hotKey2Modifier': settingsDialog.hotKey2Modifier.GetValue(), 'hotKey2KeyCode': settingsDialog.hotKey2KeyCode.GetValue()})
+                settings.saveSettings({'copyUrlToClipboard': copyUrlToClipboard, 'userId': settingsDialog.userIdField.GetValue(), \
+                'enableToastNotifications': settingsDialog.notificationCheckbox.GetValue(), 'imageFormat': settingsDialog.imageFormat.GetValue(), \
+                'screenshotSaveDirectory': settingsDialog.screenshotSaveLocation.GetValue(), \
+                'hotKey1Modifier': settingsDialog.hotKey1Modifier.GetValue(), \
+                'hotKey1KeyCode': settingsDialog.hotKey1KeyCode.GetValue(), 'hotKey2Modifier': settingsDialog.hotKey2Modifier.GetValue(), \
+                'hotKey2KeyCode': settingsDialog.hotKey2KeyCode.GetValue()})
                 settings.loadSettings()
                 
                 # Re-register the hot-keys
@@ -175,17 +180,18 @@ class SettingsDialog():
         self.dialog = self.resource.LoadDialog(parent, "SettingsDialog")
         
         # Get control references
-        self.copyUrlToClipboardCheckBox = xrc.XRCCTRL(self.dialog, 'ID_COPY_URL_TO_CLIPBOARD');
-        self.userIdField = xrc.XRCCTRL(self.dialog, 'ID_USERID');
-        self.notificationCheckbox = xrc.XRCCTRL(self.dialog, 'ID_ENOTIFICATIONS');
+        self.copyUrlToClipboardCheckBox = xrc.XRCCTRL(self.dialog, 'ID_COPY_URL_TO_CLIPBOARD')
+        self.userIdField = xrc.XRCCTRL(self.dialog, 'ID_USERID')
+        self.notificationCheckbox = xrc.XRCCTRL(self.dialog, 'ID_ENOTIFICATIONS')
+        self.imageFormat = xrc.XRCCTRL(self.dialog, 'ID_IMAGE_FORMAT')
         
-        self.screenshotSaveLocation = xrc.XRCCTRL(self.dialog, 'ID_SAVE_DIRECTORY');
+        self.screenshotSaveLocation = xrc.XRCCTRL(self.dialog, 'ID_SAVE_DIRECTORY')
         
-        self.hotKey1Modifier = xrc.XRCCTRL(self.dialog, 'ID_HOTKEY1_KEY1');
-        self.hotKey1KeyCode = xrc.XRCCTRL(self.dialog, 'ID_HOTKEY1_KEY2');
+        self.hotKey1Modifier = xrc.XRCCTRL(self.dialog, 'ID_HOTKEY1_KEY1')
+        self.hotKey1KeyCode = xrc.XRCCTRL(self.dialog, 'ID_HOTKEY1_KEY2')
         
-        self.hotKey2Modifier = xrc.XRCCTRL(self.dialog, 'ID_HOTKEY2_KEY1');
-        self.hotKey2KeyCode = xrc.XRCCTRL(self.dialog, 'ID_HOTKEY2_KEY2');
+        self.hotKey2Modifier = xrc.XRCCTRL(self.dialog, 'ID_HOTKEY2_KEY1')
+        self.hotKey2KeyCode = xrc.XRCCTRL(self.dialog, 'ID_HOTKEY2_KEY2')
         
         # Dialog events
         self.dialog.Bind(wx.EVT_COMBOBOX, self.onItemSelect)
@@ -207,6 +213,7 @@ class SettingsDialog():
         
         self.userIdField.SetValue(settings.settings['userId'])
         self.notificationCheckbox.SetValue(True if settings.settings['enableToastNotifications'] == '1' else False)
+        self.imageFormat.SetStringSelection(settings.settings['imageFormat'])
         
         self.screenshotSaveLocation.SetValue(os.path.join(screengrab.publicFolderPath, settings.settings['screenshotSaveDirectory']))
         
@@ -227,7 +234,6 @@ class SettingsDialog():
         return selectedDirectory
 
     def onStateChange(self, event):
-        
         if event.GetEventObject() == self.copyUrlToClipboardCheckBox:
             self.userIdField.Enable(True if self.copyUrlToClipboardCheckBox.IsChecked() else False)
         

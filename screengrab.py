@@ -107,15 +107,15 @@ def grab_screenshot(fullScreen = 'true', copyUrlIntoClipboard = 'false', userId 
     else:
         image = ImageGrab.grab(get_current_active_window_placement())
      
-    time = datetime.datetime.now().strftime("%Y%m%d%H%M%S"); 
-    fileName = 'screengrab_' + time + '.png'
+    time = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
+    fileName = 'screengrab_%s.%s' % (time, ('png' if settings.settings['imageFormat'] == 'PNG' else 'jpg'))
     
     settings.loadSettings()   
     saveFolderPath = os.path.join(publicFolderPath, settings.settings['screenshotSaveDirectory'])
     saveLocation = os.path.join(saveFolderPath, fileName)  
     
     # Save a screenshot to the Dropbox public folder and (optionaly) copy the file url into the clipboard
-    image.save(saveLocation, 'PNG')
+    image.save(saveLocation, settings.settings['imageFormat'])
     
     if copyUrlIntoClipboard == 'true' and userId != '':
         copy_url_to_clipboard(userId, fileName)

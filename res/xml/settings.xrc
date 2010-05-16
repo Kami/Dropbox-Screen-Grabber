@@ -2,7 +2,7 @@
 
 <resource version="2.5.3.0">
 <object class="wxDialog" name="SettingsDialog">
-	<title>Dropbox Screen Grabber settings</title>
+    <title>Dropbox Screen Grabber settings</title>
     <object class="wxBoxSizer">
         <orient>wxVERTICAL</orient>
         <object class="sizeritem">
@@ -66,6 +66,32 @@
                                 </object>
                             </object>
                         </object>
+                        <object class="sizeritem">
+                            <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                            <border>5</border>
+                            <object class="wxBoxSizer">
+                                <orient>wxHORIZONTAL</orient>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_CENTER|wxALL</flag>
+                                    <border>5</border>
+                                    <object class="wxStaticText" name="ID_TEXT">
+                                        <label>Image format:</label>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_CENTER|wxALL</flag>
+                                    <border>5</border>
+                                    <object class="wxComboBox" name="ID_IMAGE_FORMAT">
+                                        <size>100,-1</size>
+                                        <style>wxCB_DROPDOWN|wxCB_READONLY</style>
+                                        <content>
+                                            <item>PNG</item>
+                                            <item>JPEG</item>
+                                        </content>
+                                    </object>
+                                </object>
+                            </object>
+                        </object>
                     </object>
                 </object>
             </object>
@@ -81,7 +107,6 @@
                     <border>5</border>
                     <object class="wxTextCtrl" name="ID_SAVE_DIRECTORY">
                         <size>290,-1</size>
-                        <enabled>0</enabled>
                         <value></value>
                     </object>
                 </object>
@@ -123,7 +148,7 @@
                                     <border>5</border>
                                     <object class="wxComboBox" name="ID_HOTKEY1_KEY1">
                                         <size>100,-1</size>
-                                        <style>wxCB_DROPDOWN</style>
+                                        <style>wxCB_DROPDOWN|wxCB_READONLY</style>
                                         <content>
                                             <item>Ctrl</item>
                                             <item>Alt</item>
@@ -143,7 +168,7 @@
                                     <border>5</border>
                                     <object class="wxComboBox" name="ID_HOTKEY1_KEY2">
                                         <size>100,-1</size>
-                                        <style>wxCB_DROPDOWN</style>
+                                        <style>wxCB_DROPDOWN|wxCB_READONLY</style>
                                         <content>
                                             <item>F10</item>
                                             <item>F11</item>
@@ -170,7 +195,7 @@
                                     <border>5</border>
                                     <object class="wxComboBox" name="ID_HOTKEY2_KEY1">
                                         <size>100,-1</size>
-                                        <style>wxCB_DROPDOWN</style>
+                                        <style>wxCB_DROPDOWN|wxCB_READONLY</style>
                                         <content>
                                             <item>Ctrl</item>
                                             <item>Alt</item>
@@ -190,7 +215,7 @@
                                     <border>5</border>
                                     <object class="wxComboBox" name="ID_HOTKEY2_KEY2">
                                         <size>100,-1</size>
-                                        <style>wxCB_DROPDOWN</style>
+                                        <style>wxCB_DROPDOWN|wxCB_READONLY</style>
                                         <content>
                                             <item>F10</item>
                                             <item>F11</item>
@@ -227,4 +252,5 @@
         </object>
     </object>
 </object>
+
 </resource>
