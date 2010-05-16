@@ -11,6 +11,9 @@ import win32con
 
 import settings
 
+# Dropbox database files (0.7 uses dropbox.db and 0.8 uses config.db)
+DROPBOX_DATABASE_FILES = ('dropbox.db', 'config.db')
+
 def get_dropbox_path():
     '''
     Retrieve the Dropbox path.
@@ -37,19 +40,42 @@ def get_dropbox_path():
         
         # 26 is CSIDL_APPDATA, the code for retrieving the user's Application Data folder
         SHGetFolderPath(0, 26, 0, 0, path_buffer)
-        dropbox_db_path = path_buffer.value + '\Dropbox\dropbox.db'
+
+        dropbox_db_path = None
+        for file in DROPBOX_DATABASE_FILES:
+            path = os.path.join(path_buffer.value, 'Dropbox', file)
+
+            if os.path.exists(path):
+	            dropbox_db_path = path
+	            break
     else:
         dropbox_db_path = os.path.expanduser('~/.dropbox/dropbox.db')
     
+    if not dropbox_db_path:
+	    raise IOError('Dropbox database file not found')
+
     try:    
         db = sqlite3.connect(dropbox_db_path)
         cur = db.cursor()
         cur.execute("select key, value from config where key = 'dropbox_path'")
         row = cur.fetchone()
-        
-        return pickle.loads(base64.b64decode(row[1]))
-    except:
-        raise IOError('Dropbox database file not found')
+
+        if row:
+	        try:
+	            return pickle.loads(base64.b64decode(row[1]))
+	        except Exception, e:
+	            # Most likely a 0.8 branch where values are not base64 encoded and pickled
+		        return row[1]
+
+        # No dropbox_path key found, assume that the folder is located in the default location
+        dropbox_path = os.path.join(os.path.expanduser('~'), 'My Documents', 'My Dropbox')
+
+        if not os.path.exists(dropbox_path):
+	        raise IOError('Could not find Dropbox folder')
+
+        return dropbox_path
+    except Exception, e:
+        raise IOError('Problems reading the Dropbox database')
 
 def get_current_active_window_placement():
     '''
