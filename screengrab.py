@@ -14,6 +14,9 @@ import settings
 # Dropbox database files (0.7 uses dropbox.db and 0.8 uses config.db)
 DROPBOX_DATABASE_FILES = ('dropbox.db', 'config.db')
 
+# Public URL
+DROPBOX_PUBLIC_URL = 'http://dl.dropbox.com'
+
 def get_dropbox_path():
     '''
     Retrieve the Dropbox path.
@@ -50,7 +53,7 @@ def get_dropbox_path():
 	            break
     else:
         dropbox_db_path = os.path.expanduser('~/.dropbox/dropbox.db')
-    
+
     if not dropbox_db_path:
 	    raise IOError('Dropbox database file not found')
 
@@ -135,9 +138,9 @@ def copy_url_to_clipboard(userId, fileName):
     if settings.settings['screenshotSaveDirectory'] != '':
 		saveDirectory = settings.settings['screenshotSaveDirectory'].replace('\\', '/')
 		saveDirectory = saveDirectory.replace(' ', '%20')
-		publicURL = 'http://dl.getdropbox.com/u/%s/%s/%s' % (userId, saveDirectory, fileName)
+		publicURL = '%s/u/%s/%s/%s' % (DROPBOX_PUBLIC_URL, userId, saveDirectory, fileName)
     else:
-		publicURL = 'http://dl.getdropbox.com/u/%s/%s' % (userId, fileName)
+		publicURL = '%s/u/%s/%s' % (DROPBOX_PUBLIC_URL, userId, fileName)
 
     win32clipboard.OpenClipboard()
     win32clipboard.EmptyClipboard()
