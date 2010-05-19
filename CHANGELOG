@@ -1,6 +1,6 @@
 Dropbox Screen Grabber 1.5 - (19.05.2010)
 
-* Changed the public URL from getdropbox.com to getdropbox.com
+* Changed the public URL from getdropbox.com to dropbox.com
 * User can now specify image quality when the JPEG format is selected
 * User can now select to automatically shorten the URLs which are copied to the clipboard using the is.gd service
 
