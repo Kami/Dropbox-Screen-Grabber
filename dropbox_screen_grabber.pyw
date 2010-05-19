@@ -22,7 +22,7 @@
 # - Steve H. for making PythonScriptToDisplayConfig script which reads the Dropbox configuration data (http://wiki.getdropbox.com/DropboxAddons/PythonScriptToDisplayConfig)
 # - Dropbox team for making the best syncing tool
 
-__version__ = "1.4"
+__version__ = "1.5"
 
 import os
 import sys
@@ -148,7 +148,8 @@ Available hot-keys:
 				copyUrlToClipboard = settingsDialog.copyUrlToClipboardCheckBox.GetValue() if userId != '' else False
 				
 				settings.saveSettings({'copyUrlToClipboard': copyUrlToClipboard, 'userId': settingsDialog.userIdField.GetValue(), \
-				'enableToastNotifications': settingsDialog.notificationCheckbox.GetValue(), 'imageFormat': settingsDialog.imageFormat.GetValue(), \
+				'enableToastNotifications': settingsDialog.notificationCheckbox.GetValue(), 'shortenURLs': settingsDialog.shortenUrlsCheckbox.GetValue(), \
+				'imageFormat': settingsDialog.imageFormat.GetValue(), \
 				'imageQuality': settingsDialog.imageQuality.GetValue(), 'screenshotSaveDirectory': settingsDialog.screenshotSaveLocation.GetValue(), \
 				'hotKey1Modifier': settingsDialog.hotKey1Modifier.GetValue(), \
 				'hotKey1KeyCode': settingsDialog.hotKey1KeyCode.GetValue(), 'hotKey2Modifier': settingsDialog.hotKey2Modifier.GetValue(), \
@@ -183,6 +184,7 @@ class SettingsDialog():
 		self.copyUrlToClipboardCheckBox = xrc.XRCCTRL(self.dialog, 'ID_COPY_URL_TO_CLIPBOARD')
 		self.userIdField = xrc.XRCCTRL(self.dialog, 'ID_USERID')
 		self.notificationCheckbox = xrc.XRCCTRL(self.dialog, 'ID_ENOTIFICATIONS')
+		self.shortenUrlsCheckbox = xrc.XRCCTRL(self.dialog, 'ID_SHORTEN_URL')
 		self.imageFormat = xrc.XRCCTRL(self.dialog, 'ID_IMAGE_FORMAT')
 		self.imageQuality = xrc.XRCCTRL(self.dialog, 'ID_IMAGE_QUALITY')
 		
@@ -214,6 +216,7 @@ class SettingsDialog():
 		
 		self.userIdField.SetValue(settings.settings['userId'])
 		self.notificationCheckbox.SetValue(True if settings.settings['enableToastNotifications'] == '1' else False)
+		self.shortenUrlsCheckbox.SetValue(True if settings.settings['shortenURLs'] == '1' else False)
 		self.imageFormat.SetStringSelection(settings.settings['imageFormat'])
 		
 		if settings.settings['imageFormat'] == 'JPEG':
@@ -244,6 +247,7 @@ class SettingsDialog():
 	def onStateChange(self, event):
 		if event.GetEventObject() == self.copyUrlToClipboardCheckBox:
 			self.userIdField.Enable(True if self.copyUrlToClipboardCheckBox.IsChecked() else False)
+			self.shortenUrlsCheckbox.Enable(True if self.copyUrlToClipboardCheckBox.IsChecked() else False)
 		
 	def onItemSelect(self, event):
 		# Same hot-key can't be used for both actions

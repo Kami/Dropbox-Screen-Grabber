@@ -10,6 +10,7 @@ import screengrab
 settings = {
 			'copyUrlToClipboard': '0',
 			'userId': '',
+			'shortenURLs': '0',
 			'enableToastNotifications': '1',
 			'imageFormat': 'PNG',
 			'imageQuality': 'Very High',
@@ -38,6 +39,7 @@ def loadSettings():
 	
 	settings['copyUrlToClipboard'] = config.Read('copy_url_to_clipboard', '0')
 	settings['userId'] = config.Read('user_id', '')
+	settings['shortenURLs'] = config.Read('shorten_urls', '0')
 	settings['enableToastNotifications'] = config.Read('enable_toast_notifications', '1')
 	settings['imageFormat'] = config.Read('image_format', 'PNG')
 	settings['imageQuality'] = config.Read('image_quality', 'Very High')
@@ -54,6 +56,7 @@ def saveSettings(settings):
 	
 	config.Write('copy_url_to_clipboard', '1' if settings['copyUrlToClipboard'] else '0')
 	config.Write('user_id', str(settings['userId']))
+	config.Write('shorten_urls', '1' if settings['shortenURLs'] == True else '0')
 	config.Write('enable_toast_notifications', '1' if settings['enableToastNotifications'] == True else '0')
 	config.Write('image_format', str(settings['imageFormat']))
 	config.Write('image_quality', str(settings['imageQuality']))

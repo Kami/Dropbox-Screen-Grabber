@@ -10,12 +10,16 @@ import win32ui
 import win32con
 
 import settings
+import urllib2
 
 # Dropbox database files (0.7 uses dropbox.db and 0.8 uses config.db)
-DROPBOX_DATABASE_FILES = ('dropbox.db', 'config.db')
+DROPBOX_DATABASE_FILES 	= ('dropbox.db', 'config.db')
 
 # Public URL
-DROPBOX_PUBLIC_URL = 'http://dl.dropbox.com'
+DROPBOX_PUBLIC_URL 		= 'http://dl.dropbox.com'
+
+# is.gd API URL
+IS_GD_API_URL			= 'http://is.gd/api.php?longurl='
 
 # Quality options for JPEG images
 JPEG_QUALITY_CHOICES = (
@@ -30,14 +34,14 @@ JPEG_QUALITY_CHOICES = (
 )
 
 def get_dropbox_path():
-	'''
+	"""
 	Retrieve the Dropbox path.
 	
 	Keyword arguments:
 	none
 
 	Returns: string
-	'''
+	"""
 	
 	import ctypes, base64, pickle, sqlite3, os
 	is_windows = True
@@ -93,21 +97,21 @@ def get_dropbox_path():
 		raise IOError('Problems reading the Dropbox database')
 
 def get_current_active_window_placement():
-	'''
+	"""
 	Return coordinates of the currently active window.
 	
 	Keyword arguments:
 	none
 
 	Returns: tuple with 4 coordinates (left, upper, right, lower)
-	'''
+	"""
 	
 	flags, showcmd, (xy, yx), (minposX, minposY), (maxposX, maxposY, normalposX, normalposY) = win32gui.GetWindowPlacement(win32gui.GetForegroundWindow())
 	
 	return (maxposX, maxposY, normalposX, normalposY)
 
 def grab_screenshot(fullScreen = 'true', copyUrlIntoClipboard = 'false', userId = ''):
-	'''
+	"""
 	Grab a screenshot.
 	
 	Keyword arguments:
@@ -115,7 +119,7 @@ def grab_screenshot(fullScreen = 'true', copyUrlIntoClipboard = 'false', userId 
 	string copyUrlToClipboard -- true to copy the public URL to the clipboard
 
 	Returns: none
-	'''
+	"""
 	
 	if fullScreen == 'true':
 		image = ImageGrab.grab()
@@ -146,16 +150,16 @@ def grab_screenshot(fullScreen = 'true', copyUrlIntoClipboard = 'false', userId 
 		copy_url_to_clipboard(userId, fileName)
 		
 	return fileName
-	   
+
 def copy_url_to_clipboard(userId, fileName):
-	'''
+	"""
 	Copy a public link of the saved screenshot to the clipboard.
 	
 	Keyword arguments:
 	fileName -- Screnshot filename
 
 	Returns: none
-	'''
+	"""
 	
 	if settings.settings['screenshotSaveDirectory'] != '':
 		saveDirectory = settings.settings['screenshotSaveDirectory'].replace('\\', '/')
@@ -163,6 +167,13 @@ def copy_url_to_clipboard(userId, fileName):
 		publicURL = '%s/u/%s/%s/%s' % (DROPBOX_PUBLIC_URL, userId, saveDirectory, fileName)
 	else:
 		publicURL = '%s/u/%s/%s' % (DROPBOX_PUBLIC_URL, userId, fileName)
+		
+	# If URL shortening is enabled, shorten the URL
+	if settings.settings['shortenURLs'] == '1':
+		short_url = shorten_url(publicURL)
+		
+		if short_url:
+			publicURL = short_url
 
 	win32clipboard.OpenClipboard()
 	win32clipboard.EmptyClipboard()
@@ -170,3 +181,25 @@ def copy_url_to_clipboard(userId, fileName):
 	win32clipboard.CloseClipboard()
 	
 publicFolderPath = os.path.join(get_dropbox_path(), 'Public')
+
+def shorten_url(long_url):
+	"""
+	Shortens a URL using is.gd service.
+	
+	If URL is successfully shortened, short URL is returned,
+	None otherwise.
+	"""
+	
+	try:
+		request = urllib2.Request(url = '%s%s' % (IS_GD_API_URL, long_url))
+		response = urllib2.urlopen(request, timeout = 5)
+	except IOError:
+		return None
+	
+	url = response.read()
+	
+	if url.find('http://is.gd') == -1:
+		return None
+	
+	url = url.strip()
+	return url
