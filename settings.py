@@ -12,6 +12,7 @@ settings = {
             'userId': '',
             'enableToastNotifications': '1',
             'imageFormat': 'PNG',
+            'imageQuality': 'Very High',
             'screenshotSaveDirectory': '',
             'hotKey1Modifier': 'Shift',
             'hotKey1KeyCode': 'F10',
@@ -39,6 +40,7 @@ def loadSettings():
     settings['userId'] = config.Read('user_id', '')
     settings['enableToastNotifications'] = config.Read('enable_toast_notifications', '1')
     settings['imageFormat'] = config.Read('image_format', 'PNG')
+    settings['imageQuality'] = config.Read('image_quality', 'Very High')
     
     settings['screenshotSaveDirectory'] = config.Read('screenshot_save_directory', '')
     
@@ -54,6 +56,7 @@ def saveSettings(settings):
     config.Write('user_id', str(settings['userId']))
     config.Write('enable_toast_notifications', '1' if settings['enableToastNotifications'] == True else '0')
     config.Write('image_format', str(settings['imageFormat']))
+    config.Write('image_quality', str(settings['imageQuality']))
     
     saveDirectory = settings['screenshotSaveDirectory']
     saveDirectory = saveDirectory[len(screengrab.publicFolderPath) + 1:] if saveDirectory.find(screengrab.publicFolderPath) != -1 and len(saveDirectory) > len(screengrab.publicFolderPath) else None

@@ -149,7 +149,7 @@ Available hot-keys:
                 
                 settings.saveSettings({'copyUrlToClipboard': copyUrlToClipboard, 'userId': settingsDialog.userIdField.GetValue(), \
                 'enableToastNotifications': settingsDialog.notificationCheckbox.GetValue(), 'imageFormat': settingsDialog.imageFormat.GetValue(), \
-                'screenshotSaveDirectory': settingsDialog.screenshotSaveLocation.GetValue(), \
+                'imageQuality': settingsDialog.imageQuality.GetValue(), 'screenshotSaveDirectory': settingsDialog.screenshotSaveLocation.GetValue(), \
                 'hotKey1Modifier': settingsDialog.hotKey1Modifier.GetValue(), \
                 'hotKey1KeyCode': settingsDialog.hotKey1KeyCode.GetValue(), 'hotKey2Modifier': settingsDialog.hotKey2Modifier.GetValue(), \
                 'hotKey2KeyCode': settingsDialog.hotKey2KeyCode.GetValue()})
@@ -184,6 +184,7 @@ class SettingsDialog():
         self.userIdField = xrc.XRCCTRL(self.dialog, 'ID_USERID')
         self.notificationCheckbox = xrc.XRCCTRL(self.dialog, 'ID_ENOTIFICATIONS')
         self.imageFormat = xrc.XRCCTRL(self.dialog, 'ID_IMAGE_FORMAT')
+        self.imageQuality = xrc.XRCCTRL(self.dialog, 'ID_IMAGE_QUALITY')
         
         self.screenshotSaveLocation = xrc.XRCCTRL(self.dialog, 'ID_SAVE_DIRECTORY')
         
@@ -215,6 +216,13 @@ class SettingsDialog():
         self.notificationCheckbox.SetValue(True if settings.settings['enableToastNotifications'] == '1' else False)
         self.imageFormat.SetStringSelection(settings.settings['imageFormat'])
         
+        if settings.settings['imageFormat'] == 'JPEG':
+            self.imageQuality.Enable(True)
+        else:
+            self.imageQuality.Enable(False)
+            
+        self.imageQuality.SetStringSelection(settings.settings['imageQuality'])
+        
         self.screenshotSaveLocation.SetValue(os.path.join(screengrab.publicFolderPath, settings.settings['screenshotSaveDirectory']))
         
         self.hotKey1Modifier.SetStringSelection(settings.settings['hotKey1Modifier'])
@@ -244,6 +252,9 @@ class SettingsDialog():
             
             # Re-populate the dialog with the saved data
             self.populateDialog()
+ 
+        if event.GetEventObject() == self.imageFormat:
+        	self.imageQuality.Enable(True if self.imageFormat.GetValue() == 'JPEG' else False)
             
     def onButtonClick(self, event):
         directory = self.chooseSaveLocationDirectory()

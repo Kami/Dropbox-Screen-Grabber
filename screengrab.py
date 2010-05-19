@@ -17,6 +17,18 @@ DROPBOX_DATABASE_FILES = ('dropbox.db', 'config.db')
 # Public URL
 DROPBOX_PUBLIC_URL = 'http://dl.dropbox.com'
 
+# Quality options for JPEG images
+JPEG_QUALITY_CHOICES = (
+    (30, 'Very Low'),
+    (40, 'Low'),
+    (50, 'Medium-Low'),
+    (60, 'Medium'),
+    (70, 'Medium-High'),
+    (80, 'High'),
+    (90, 'Very High'),
+    (100, 'Maximum')
+)
+
 def get_dropbox_path():
     '''
     Retrieve the Dropbox path.
@@ -49,13 +61,13 @@ def get_dropbox_path():
             path = os.path.join(path_buffer.value, 'Dropbox', file)
 
             if os.path.exists(path):
-	            dropbox_db_path = path
-	            break
+                dropbox_db_path = path
+                break
     else:
         dropbox_db_path = os.path.expanduser('~/.dropbox/dropbox.db')
 
     if not dropbox_db_path:
-	    raise IOError('Dropbox database file not found')
+        raise IOError('Dropbox database file not found')
 
     try:    
         db = sqlite3.connect(dropbox_db_path)
@@ -64,17 +76,17 @@ def get_dropbox_path():
         row = cur.fetchone()
 
         if row:
-	        try:
-	            return pickle.loads(base64.b64decode(row[1]))
-	        except Exception, e:
-	            # Most likely a 0.8 branch where values are not base64 encoded and pickled
-		        return row[1]
+            try:
+                return pickle.loads(base64.b64decode(row[1]))
+            except Exception, e:
+                # Most likely a 0.8 branch where values are not base64 encoded and pickled
+                return row[1]
 
         # No dropbox_path key found, assume that the folder is located in the default location
         dropbox_path = os.path.join(os.path.expanduser('~'), 'My Documents', 'My Dropbox')
 
         if not os.path.exists(dropbox_path):
-	        raise IOError('Could not find Dropbox folder')
+            raise IOError('Could not find Dropbox folder')
 
         return dropbox_path
     except Exception, e:
@@ -118,7 +130,17 @@ def grab_screenshot(fullScreen = 'true', copyUrlIntoClipboard = 'false', userId 
     saveLocation = os.path.join(saveFolderPath, fileName)  
     
     # Save a screenshot to the Dropbox public folder and (optionaly) copy the file url into the clipboard
-    image.save(saveLocation, settings.settings['imageFormat'])
+    if settings.settings['imageFormat'] == 'JPEG':
+        try:
+            quality = [value[0] for value in JPEG_QUALITY_CHOICES \
+                    if value[1] == settings.settings['imageQuality']][0]
+            quality = int(quality)
+        except IndexError:
+             quality = 100
+             
+        image.save(saveLocation, settings.settings['imageFormat'], quality = quality)
+    else:
+         image.save(saveLocation, settings.settings['imageFormat'], optimize = True)
     
     if copyUrlIntoClipboard == 'true' and userId != '':
         copy_url_to_clipboard(userId, fileName)
@@ -134,13 +156,13 @@ def copy_url_to_clipboard(userId, fileName):
 
     Returns: none
     '''
-	
+    
     if settings.settings['screenshotSaveDirectory'] != '':
-		saveDirectory = settings.settings['screenshotSaveDirectory'].replace('\\', '/')
-		saveDirectory = saveDirectory.replace(' ', '%20')
-		publicURL = '%s/u/%s/%s/%s' % (DROPBOX_PUBLIC_URL, userId, saveDirectory, fileName)
+        saveDirectory = settings.settings['screenshotSaveDirectory'].replace('\\', '/')
+        saveDirectory = saveDirectory.replace(' ', '%20')
+        publicURL = '%s/u/%s/%s/%s' % (DROPBOX_PUBLIC_URL, userId, saveDirectory, fileName)
     else:
-		publicURL = '%s/u/%s/%s' % (DROPBOX_PUBLIC_URL, userId, fileName)
+        publicURL = '%s/u/%s/%s' % (DROPBOX_PUBLIC_URL, userId, fileName)
 
     win32clipboard.OpenClipboard()
     win32clipboard.EmptyClipboard()
