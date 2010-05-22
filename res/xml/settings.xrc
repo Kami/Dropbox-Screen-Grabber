@@ -202,7 +202,7 @@
                                                 <weight>bold</weight>
                                                 <family>swiss</family>
                                             </font>
-                                            <label>Image format and quality</label>
+                                            <label>Image settings</label>
                                         </object>
                                     </object>
                                 </object>
@@ -210,57 +210,114 @@
                             <object class="sizeritem">
                                 <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
                                 <border>5</border>
-                                <object class="wxBoxSizer">
-                                    <orient>wxHORIZONTAL</orient>
+                                <object class="wxGridSizer">
+                                    <cols>2</cols>
+                                    <rows>0</rows>
+                                    <vgap>0</vgap>
+                                    <hgap>0</hgap>
                                     <object class="sizeritem">
-                                        <flag>wxALIGN_CENTER|wxALL</flag>
+                                        <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
                                         <border>5</border>
-                                        <object class="wxStaticText" name="ID_TEXT">
-                                            <label>Image format:</label>
+                                        <object class="wxBoxSizer">
+                                            <orient>wxHORIZONTAL</orient>
+                                            <object class="sizeritem">
+                                                <option>1</option>
+                                                <flag>wxALIGN_CENTER|wxALL</flag>
+                                                <border>5</border>
+                                                <object class="wxStaticText" name="ID_TEXT">
+                                                    <label>Image format:</label>
+                                                </object>
+                                            </object>
+                                        </object>
+                                    </object>
+                                    <object class="sizeritem">
+                                        <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                        <border>5</border>
+                                        <object class="wxBoxSizer">
+                                            <orient>wxHORIZONTAL</orient>
+                                            <object class="sizeritem">
+                                                <flag>wxALIGN_CENTER|wxALL</flag>
+                                                <border>5</border>
+                                                <object class="wxComboBox" name="ID_IMAGE_FORMAT">
+                                                    <size>130,-1</size>
+                                                    <style>wxCB_DROPDOWN|wxCB_READONLY</style>
+                                                    <content>
+                                                        <item>PNG</item>
+                                                        <item>JPEG</item>
+                                                    </content>
+                                                </object>
+                                            </object>
+                                        </object>
+                                    </object>
+                                    <object class="sizeritem">
+                                        <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                        <border>5</border>
+                                        <object class="wxBoxSizer">
+                                            <orient>wxHORIZONTAL</orient>
+                                            <object class="sizeritem">
+                                                <option>1</option>
+                                                <flag>wxALIGN_CENTER|wxALL</flag>
+                                                <border>5</border>
+                                                <object class="wxStaticText" name="ID_TEXT">
+                                                    <label>Image quality:</label>
+                                                </object>
+                                            </object>
+                                        </object>
+                                    </object>
+                                    <object class="sizeritem">
+                                        <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                        <border>5</border>
+                                        <object class="wxBoxSizer">
+                                            <orient>wxHORIZONTAL</orient>
+                                            <object class="sizeritem">
+                                                <flag>wxALIGN_CENTER|wxALL</flag>
+                                                <border>5</border>
+                                                <object class="wxComboBox" name="ID_IMAGE_QUALITY">
+                                                    <size>130,-1</size>
+                                                    <style>wxCB_DROPDOWN|wxCB_READONLY</style>
+                                                    <content>
+                                                        <item>Very Low</item>
+                                                        <item>Low</item>
+                                                        <item>Medium-Low</item>
+                                                        <item>Medium</item>
+                                                        <item>Medium-High</item>
+                                                        <item>High</item>
+                                                        <item>Very High</item>
+                                                        <item>Maximum</item>
+                                                    </content>
+                                                </object>
+                                            </object>
+                                        </object>
+                                    </object>
+                                    <object class="sizeritem">
+                                        <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                        <border>5</border>
+                                        <object class="wxBoxSizer">
+                                            <orient>wxHORIZONTAL</orient>
+                                            <object class="sizeritem">
+                                                <option>1</option>
+                                                <flag>wxALIGN_CENTER|wxALL</flag>
+                                                <border>5</border>
+                                                <object class="wxStaticText" name="ID_TEXT">
+                                                    <label>Filename prefix:</label>
+                                                </object>
+                                            </object>
                                         </object>
                                     </object>
                                     <object class="sizeritem">
                                         <flag>wxALIGN_CENTER|wxALL</flag>
                                         <border>5</border>
-                                        <object class="wxComboBox" name="ID_IMAGE_FORMAT">
-                                            <size>130,-1</size>
-                                            <style>wxCB_DROPDOWN|wxCB_READONLY</style>
-                                            <content>
-                                                <item>PNG</item>
-                                                <item>JPEG</item>
-                                            </content>
-                                        </object>
-                                    </object>
-                                </object>
-                            </object>
-                            <object class="sizeritem">
-                                <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                                <border>5</border>
-                                <object class="wxBoxSizer">
-                                    <orient>wxHORIZONTAL</orient>
-                                    <object class="sizeritem">
-                                        <flag>wxALIGN_CENTER|wxALL</flag>
-                                        <border>5</border>
-                                        <object class="wxStaticText" name="ID_TEXT">
-                                            <label>Image quality:</label>
-                                        </object>
-                                    </object>
-                                    <object class="sizeritem">
-                                        <flag>wxALIGN_CENTER|wxALL</flag>
-                                        <border>5</border>
-                                        <object class="wxComboBox" name="ID_IMAGE_QUALITY">
-                                            <size>130,-1</size>
-                                            <style>wxCB_DROPDOWN|wxCB_READONLY</style>
-                                            <content>
-                                                <item>Very Low</item>
-                                                <item>Low</item>
-                                                <item>Medium-Low</item>
-                                                <item>Medium</item>
-                                                <item>Medium-High</item>
-                                                <item>High</item>
-                                                <item>Very High</item>
-                                                <item>Maximum</item>
-                                            </content>
+                                        <object class="wxBoxSizer">
+                                            <orient>wxHORIZONTAL</orient>
+                                            <object class="sizeritem">
+                                                <flag>wxALIGN_CENTER|wxALL</flag>
+                                                <border>5</border>
+                                                <object class="wxTextCtrl" name="ID_FILENAME_PREFIX">
+                                                    <size>150,-1</size>
+                                                    <tooltip>The string which will be prepended before the timestamp in the file name</tooltip>
+                                                    <value></value>
+                                                </object>
+                                            </object>
                                         </object>
                                     </object>
                                 </object>
@@ -638,7 +695,7 @@
                             <weight>bold</weight>
                             <family>swiss</family>
                         </font>
-                        <label>Image format and quality</label>
+                        <label>Image settings</label>
                     </object>
                 </object>
             </object>
@@ -646,57 +703,114 @@
         <object class="sizeritem">
             <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
             <border>5</border>
-            <object class="wxBoxSizer">
-                <orient>wxHORIZONTAL</orient>
+            <object class="wxGridSizer">
+                <cols>2</cols>
+                <rows>0</rows>
+                <vgap>0</vgap>
+                <hgap>0</hgap>
                 <object class="sizeritem">
-                    <flag>wxALIGN_CENTER|wxALL</flag>
+                    <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
                     <border>5</border>
-                    <object class="wxStaticText" name="ID_TEXT">
-                        <label>Image format:</label>
+                    <object class="wxBoxSizer">
+                        <orient>wxHORIZONTAL</orient>
+                        <object class="sizeritem">
+                            <option>1</option>
+                            <flag>wxALIGN_CENTER|wxALL</flag>
+                            <border>5</border>
+                            <object class="wxStaticText" name="ID_TEXT">
+                                <label>Image format:</label>
+                            </object>
+                        </object>
+                    </object>
+                </object>
+                <object class="sizeritem">
+                    <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                    <border>5</border>
+                    <object class="wxBoxSizer">
+                        <orient>wxHORIZONTAL</orient>
+                        <object class="sizeritem">
+                            <flag>wxALIGN_CENTER|wxALL</flag>
+                            <border>5</border>
+                            <object class="wxComboBox" name="ID_IMAGE_FORMAT">
+                                <size>130,-1</size>
+                                <style>wxCB_DROPDOWN|wxCB_READONLY</style>
+                                <content>
+                                    <item>PNG</item>
+                                    <item>JPEG</item>
+                                </content>
+                            </object>
+                        </object>
+                    </object>
+                </object>
+                <object class="sizeritem">
+                    <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                    <border>5</border>
+                    <object class="wxBoxSizer">
+                        <orient>wxHORIZONTAL</orient>
+                        <object class="sizeritem">
+                            <option>1</option>
+                            <flag>wxALIGN_CENTER|wxALL</flag>
+                            <border>5</border>
+                            <object class="wxStaticText" name="ID_TEXT">
+                                <label>Image quality:</label>
+                            </object>
+                        </object>
+                    </object>
+                </object>
+                <object class="sizeritem">
+                    <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                    <border>5</border>
+                    <object class="wxBoxSizer">
+                        <orient>wxHORIZONTAL</orient>
+                        <object class="sizeritem">
+                            <flag>wxALIGN_CENTER|wxALL</flag>
+                            <border>5</border>
+                            <object class="wxComboBox" name="ID_IMAGE_QUALITY">
+                                <size>130,-1</size>
+                                <style>wxCB_DROPDOWN|wxCB_READONLY</style>
+                                <content>
+                                    <item>Very Low</item>
+                                    <item>Low</item>
+                                    <item>Medium-Low</item>
+                                    <item>Medium</item>
+                                    <item>Medium-High</item>
+                                    <item>High</item>
+                                    <item>Very High</item>
+                                    <item>Maximum</item>
+                                </content>
+                            </object>
+                        </object>
+                    </object>
+                </object>
+                <object class="sizeritem">
+                    <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                    <border>5</border>
+                    <object class="wxBoxSizer">
+                        <orient>wxHORIZONTAL</orient>
+                        <object class="sizeritem">
+                            <option>1</option>
+                            <flag>wxALIGN_CENTER|wxALL</flag>
+                            <border>5</border>
+                            <object class="wxStaticText" name="ID_TEXT">
+                                <label>Filename prefix:</label>
+                            </object>
+                        </object>
                     </object>
                 </object>
                 <object class="sizeritem">
                     <flag>wxALIGN_CENTER|wxALL</flag>
                     <border>5</border>
-                    <object class="wxComboBox" name="ID_IMAGE_FORMAT">
-                        <size>130,-1</size>
-                        <style>wxCB_DROPDOWN|wxCB_READONLY</style>
-                        <content>
-                            <item>PNG</item>
-                            <item>JPEG</item>
-                        </content>
-                    </object>
-                </object>
-            </object>
-        </object>
-        <object class="sizeritem">
-            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
-            <border>5</border>
-            <object class="wxBoxSizer">
-                <orient>wxHORIZONTAL</orient>
-                <object class="sizeritem">
-                    <flag>wxALIGN_CENTER|wxALL</flag>
-                    <border>5</border>
-                    <object class="wxStaticText" name="ID_TEXT">
-                        <label>Image quality:</label>
-                    </object>
-                </object>
-                <object class="sizeritem">
-                    <flag>wxALIGN_CENTER|wxALL</flag>
-                    <border>5</border>
-                    <object class="wxComboBox" name="ID_IMAGE_QUALITY">
-                        <size>130,-1</size>
-                        <style>wxCB_DROPDOWN|wxCB_READONLY</style>
-                        <content>
-                            <item>Very Low</item>
-                            <item>Low</item>
-                            <item>Medium-Low</item>
-                            <item>Medium</item>
-                            <item>Medium-High</item>
-                            <item>High</item>
-                            <item>Very High</item>
-                            <item>Maximum</item>
-                        </content>
+                    <object class="wxBoxSizer">
+                        <orient>wxHORIZONTAL</orient>
+                        <object class="sizeritem">
+                            <flag>wxALIGN_CENTER|wxALL</flag>
+                            <border>5</border>
+                            <object class="wxTextCtrl" name="ID_FILENAME_PREFIX">
+                                <size>150,-1</size>
+                                <tooltip>The string which will be prepended before the timestamp in the file name</tooltip>
+                                <value></value>
+                            </object>
+                        </object>
                     </object>
                 </object>
             </object>

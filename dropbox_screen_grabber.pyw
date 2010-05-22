@@ -143,14 +143,19 @@ Available hot-keys:
 			settingsDialog.dialog.CenterOnScreen()
 			
 			if settingsDialog.dialog.ShowModal() == wx.ID_OK:
-				# Save the settings
+				# Filename prefix cannot be empty
+				if not settingsDialog.filenamePrefix.GetValue():
+					wx.MessageBox("Filename prefix cannot be empty", "ERROR")
+					
+					return False
+					
 				userId = settingsDialog.userIdField.GetValue()
 				copyUrlToClipboard = settingsDialog.copyUrlToClipboardCheckBox.GetValue() if userId != '' else False
 				
 				settings.saveSettings({'copyUrlToClipboard': copyUrlToClipboard, 'userId': settingsDialog.userIdField.GetValue(), \
 				'enableToastNotifications': settingsDialog.notificationCheckbox.GetValue(), 'shortenURLs': settingsDialog.shortenUrlsCheckbox.GetValue(), \
-				'imageFormat': settingsDialog.imageFormat.GetValue(), \
-				'imageQuality': settingsDialog.imageQuality.GetValue(), 'screenshotSaveDirectory': settingsDialog.screenshotSaveLocation.GetValue(), \
+				'imageFormat': settingsDialog.imageFormat.GetValue(), 'imageQuality': settingsDialog.imageQuality.GetValue(), \
+				'filenamePrefix': settingsDialog.filenamePrefix.GetValue(), 'screenshotSaveDirectory': settingsDialog.screenshotSaveLocation.GetValue(), \
 				'hotKey1Modifier': settingsDialog.hotKey1Modifier.GetValue(), \
 				'hotKey1KeyCode': settingsDialog.hotKey1KeyCode.GetValue(), 'hotKey2Modifier': settingsDialog.hotKey2Modifier.GetValue(), \
 				'hotKey2KeyCode': settingsDialog.hotKey2KeyCode.GetValue()})
@@ -185,8 +190,10 @@ class SettingsDialog():
 		self.userIdField = xrc.XRCCTRL(self.dialog, 'ID_USERID')
 		self.notificationCheckbox = xrc.XRCCTRL(self.dialog, 'ID_ENOTIFICATIONS')
 		self.shortenUrlsCheckbox = xrc.XRCCTRL(self.dialog, 'ID_SHORTEN_URL')
+		
 		self.imageFormat = xrc.XRCCTRL(self.dialog, 'ID_IMAGE_FORMAT')
 		self.imageQuality = xrc.XRCCTRL(self.dialog, 'ID_IMAGE_QUALITY')
+		self.filenamePrefix = xrc.XRCCTRL(self.dialog, 'ID_FILENAME_PREFIX')
 		
 		self.screenshotSaveLocation = xrc.XRCCTRL(self.dialog, 'ID_SAVE_DIRECTORY')
 		
@@ -217,6 +224,7 @@ class SettingsDialog():
 		self.userIdField.SetValue(settings.settings['userId'])
 		self.notificationCheckbox.SetValue(True if settings.settings['enableToastNotifications'] == '1' else False)
 		self.shortenUrlsCheckbox.SetValue(True if settings.settings['shortenURLs'] == '1' else False)
+		
 		self.imageFormat.SetStringSelection(settings.settings['imageFormat'])
 		
 		if settings.settings['imageFormat'] == 'JPEG':
@@ -225,6 +233,7 @@ class SettingsDialog():
 			self.imageQuality.Enable(False)
 			
 		self.imageQuality.SetStringSelection(settings.settings['imageQuality'])
+		self.filenamePrefix.SetValue(settings.settings['filenamePrefix'])
 		
 		self.screenshotSaveLocation.SetValue(os.path.join(screengrab.publicFolderPath, settings.settings['screenshotSaveDirectory']))
 		
