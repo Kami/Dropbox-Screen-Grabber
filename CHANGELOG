@@ -1,3 +1,10 @@
+Dropbox Screen Grabber 1.6 - (22.05.2010)
+
+* Fixed the application / taskbar icon title issue
+* Screenshot filename prefix can now be changed in the settings
+* Reorganized the settings dialog and made it more user friendly
+* Option for automatically resizing a screenshot before saving has been added to the settings
+
 Dropbox Screen Grabber 1.5 - (19.05.2010)
 
 * Changed the public URL from getdropbox.com to dropbox.com
