@@ -10,20 +10,23 @@ import screengrab
 UPDATE_CHECK_URL = 'http://dl.getdropbox.com/u/521887/dropbox_screen_grabber/latest'
 
 settings = {
-			'copyUrlToClipboard': '0',
-			'userId': '',
-			'shortenURLs': '0',
-			'enableToastNotifications': '1',
-			'imageFormat': 'PNG',
-			'imageQuality': 'Very High',
-			'filenamePrefix': 'screengrab',
-			'screenshotSaveDirectory': '',
-			'hotKey1Modifier': 'Shift',
-			'hotKey1KeyCode': 'F10',
-			'hotKey2Modifier': 'Shift',
-			'hotKey2KeyCode': 'F11',
-			'resizeImage': '0',
-			'resizeValue': '95%'
+			'user_id': '',
+			'copy_url_to_clipboard': '0',
+			'shorten_urls': '0',
+			'enable_toast_notifications': '1',
+			
+			'image_format': 'PNG',
+			'image_quality': 'Very High',
+			'filename_prefix': 'screengrab',
+			'screenshot_save_directory': '',
+			
+			'hot_key1_modifier': 'Shift',
+			'hot_key1_key_code': 'F10',
+			'hot_key2_modifier': 'Shift',
+			'hot_key2_key_code': 'F11',
+			
+			'resize_image': '0',
+			'resize_value': '95%',
 			}
 
 modifiers = {
@@ -40,48 +43,26 @@ keyCodes = {
 def loadSettings():
 	config = wx.Config('dropbox_screen_grabber')
 	
-	settings['copyUrlToClipboard'] = config.Read('copy_url_to_clipboard', '0')
-	settings['userId'] = config.Read('user_id', '')
-	settings['shortenURLs'] = config.Read('shorten_urls', '0')
-	settings['enableToastNotifications'] = config.Read('enable_toast_notifications', '1')
-	
-	settings['imageFormat'] = config.Read('image_format', 'PNG')
-	settings['imageQuality'] = config.Read('image_quality', 'Very High')
-	settings['filenamePrefix'] = config.Read('filename_prefix', 'screengrab')
-	
-	settings['screenshotSaveDirectory'] = config.Read('screenshot_save_directory', '')
-	
-	settings['hotKey1Modifier'] = config.Read('hot_key1_modifier', 'Shift')
-	settings['hotKey1KeyCode'] = config.Read('hot_key1_key_code', 'F10')
-	settings['hotKey2Modifier'] = config.Read('hot_key2_modifier', 'Shift')
-	settings['hotKey2KeyCode'] = config.Read('hot_key2_key_code', 'F11')
-	
-	settings['resizeImage'] = config.Read('resize_image', '0')
-	settings['resizeValue'] = config.Read('resize_value', '95%')
+	for key, value in settings.iteritems():
+		settings[key] = config.Read(key, value)
 
-def saveSettings(settings):
+def saveSettings(settingsNew):
 	config = wx.Config('dropbox_screen_grabber')
 	
-	config.Write('copy_url_to_clipboard', '1' if settings['copyUrlToClipboard'] else '0')
-	config.Write('user_id', str(settings['userId']))
-	config.Write('shorten_urls', '1' if settings['shortenURLs'] == True else '0')
-	config.Write('enable_toast_notifications', '1' if settings['enableToastNotifications'] == True else '0')
+	for key, value in settings.iteritems():
+		value = settingsNew[key]
+		
+		if type(value) == bool:
+			value = '1' if value else '0'
+			
+		config.Write(key, str(value))
 	
-	config.Write('image_format', str(settings['imageFormat']))
-	config.Write('image_quality', str(settings['imageQuality']))
-	config.Write('filename_prefix', str(settings['filenamePrefix']))
-	
-	saveDirectory = settings['screenshotSaveDirectory']
+	# Only path relative to Dropbox public directory is allowed
+	saveDirectory = settingsNew['screenshot_save_directory']
 	saveDirectory = saveDirectory[len(screengrab.publicFolderPath) + 1:] if saveDirectory.find(screengrab.publicFolderPath) != -1 and len(saveDirectory) > len(screengrab.publicFolderPath) else None
-	config.Write('screenshot_save_directory', saveDirectory if saveDirectory != None else '') # only path relative to Dropbox public directory is allowed
 	
-	config.Write('hot_key1_modifier', str(settings['hotKey1Modifier']))
-	config.Write('hot_key1_key_code', str(settings['hotKey1KeyCode']))
-	config.Write('hot_key2_modifier', str(settings['hotKey2Modifier']))
-	config.Write('hot_key2_key_code', str(settings['hotKey2KeyCode']))
-	
-	config.Write('resize_image', '1' if settings['resizeImage'] == True else '0')
-	config.Write('resize_value', str(settings['resizeValue']))
+	if not saveDirectory:
+		config.Write('screenshot_save_directory', '')
 	
 def get_latest_version():
 	request = urllib2.Request(UPDATE_CHECK_URL)

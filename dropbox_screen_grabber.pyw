@@ -38,7 +38,7 @@ try:
 except IOError:
 	# Dropbox database not found, show the error and exit the application
 	application = wx.App()
-	wx.MessageBox("No Dropbox installation detected", "ERROR", wx.ICON_ERROR)
+	wx.MessageBox("No Dropbox installation detected", "Error", wx.ICON_ERROR)
 	application.MainLoop()
 	sys.exit(1)
 import settings
@@ -76,8 +76,8 @@ class DropboxScreenGrabberFrame(wx.Frame):
 		self.Bind(wx.EVT_CLOSE, self.OnCloseWindow)
 		
 	def registerHotKeys(self):
-		self.RegisterHotKey(ID_HOT_KEY_FULL, settings.modifiers[settings.settings['hotKey1Modifier']], settings.keyCodes[settings.settings['hotKey1KeyCode']])  # Shift + F10
-		self.RegisterHotKey(ID_HOT_KEY_ACTIVE, settings.modifiers[settings.settings['hotKey2Modifier']], settings.keyCodes[settings.settings['hotKey2KeyCode']])  # Shift + F11
+		self.RegisterHotKey(ID_HOT_KEY_FULL, settings.modifiers[settings.settings['hot_key1_modifier']], settings.keyCodes[settings.settings['hot_key1_key_code']])  # Shift + F10
+		self.RegisterHotKey(ID_HOT_KEY_ACTIVE, settings.modifiers[settings.settings['hot_key2_modifier']], settings.keyCodes[settings.settings['hot_key2_key_code']])  # Shift + F11
 		
 		# Bind the hot-key events
 		self.Bind(wx.EVT_HOTKEY, self.handleMenuAndHotKeyEvents, id = ID_TAKE_SCREEN_FULL)
@@ -96,15 +96,15 @@ class DropboxScreenGrabberFrame(wx.Frame):
 		eventId = event.GetId()
 		
 		if eventId == ID_TAKE_SCREEN_FULL:
-			fileName = screengrab.grab_screenshot('true', 'true' if settings.settings['copyUrlToClipboard'] == '1' else 'false', settings.settings['userId'])
+			fileName = screengrab.grab_screenshot(True, True if settings.settings['copy_url_to_clipboard'] == '1' else False, settings.settings['user_id'])
 			
-			if (settings.settings['enableToastNotifications']  == '1'):
+			if (settings.settings['enable_toast_notifications']  == '1'):
 				self.showNotification(os.path.join(screengrab.publicFolderPath, fileName))
 		elif eventId == ID_TAKE_SCREEN_ACTIVE:
-			fileName = screengrab.grab_screenshot('false', 'true' if settings.settings['copyUrlToClipboard'] == '1' else 'false', settings.settings['userId'])
+			fileName = screengrab.grab_screenshot(False, True if settings.settings['copy_url_to_clipboard'] == '1' else False, settings.settings['user_id'])
 			
-			if (settings.settings['enableToastNotifications'] == '1'):
-			   self.showNotification(os.path.join(screengrab.publicFolderPath, fileName))
+			if (settings.settings['enable_toast_notifications'] == '1'):
+				self.showNotification(os.path.join(screengrab.publicFolderPath, fileName))
 		elif eventId == ID_UPDATE_CHECK:
 			
 			try:
@@ -115,7 +115,7 @@ class DropboxScreenGrabberFrame(wx.Frame):
 				return
 
 			if version > __version__:
-				 wx.MessageBox("New version is available (v%s), you can download it from %s" % (version, downloadUrl), "Update check", wx.ICON_INFORMATION)
+				wx.MessageBox("New version is available (v%s), you can download it from %s" % (version, downloadUrl), "Update check", wx.ICON_INFORMATION)
 			else:
 				wx.MessageBox("You are using the latest version", "Update check", wx.ICON_INFORMATION)
 		elif eventId == ID_ABOUT:
@@ -128,7 +128,7 @@ public file URL to the clipboard after taking the screenshot.
 Available hot-keys:
 
 %s + %s - capture a screenshot of the whole desktop
-%s + %s - capture a screenshot of the currently active window''' % (APP_NAME, settings.settings['hotKey1Modifier'], settings.settings['hotKey1KeyCode'], settings.settings['hotKey2Modifier'], settings.settings['hotKey2KeyCode'])
+%s + %s - capture a screenshot of the currently active window''' % (APP_NAME, settings.settings['hot_key1_modifier'], settings.settings['hot_key1_key_code'], settings.settings['hot_key2_modifier'], settings.settings['hot_key2_key_code'])
 
 			info = wx.AboutDialogInfo()
 			
@@ -145,21 +145,21 @@ Available hot-keys:
 			if settingsDialog.dialog.ShowModal() == wx.ID_OK:
 				# Filename prefix cannot be empty
 				if not settingsDialog.filenamePrefix.GetValue():
-					wx.MessageBox("Filename prefix cannot be empty", "ERROR")
+					wx.MessageBox("Filename prefix cannot be empty", "Error")
 					
 					return False
 					
 				userId = settingsDialog.userIdField.GetValue()
 				copyUrlToClipboard = settingsDialog.copyUrlToClipboardCheckBox.GetValue() if userId != '' else False
 				
-				settings.saveSettings({'copyUrlToClipboard': copyUrlToClipboard, 'userId': settingsDialog.userIdField.GetValue(), \
-				'enableToastNotifications': settingsDialog.notificationCheckbox.GetValue(), 'shortenURLs': settingsDialog.shortenUrlsCheckbox.GetValue(), \
-				'imageFormat': settingsDialog.imageFormat.GetValue(), 'imageQuality': settingsDialog.imageQuality.GetValue(), \
-				'filenamePrefix': settingsDialog.filenamePrefix.GetValue(), 'screenshotSaveDirectory': settingsDialog.screenshotSaveLocation.GetValue(), \
-				'hotKey1Modifier': settingsDialog.hotKey1Modifier.GetValue(), \
-				'hotKey1KeyCode': settingsDialog.hotKey1KeyCode.GetValue(), 'hotKey2Modifier': settingsDialog.hotKey2Modifier.GetValue(), \
-				'hotKey2KeyCode': settingsDialog.hotKey2KeyCode.GetValue(),
-				'resizeImage': settingsDialog.resizeImageCheckbox.GetValue(), 'resizeValue': settingsDialog.resizeImageValue.GetValue()})
+				settings.saveSettings({'copy_url_to_clipboard': copyUrlToClipboard, 'user_id': settingsDialog.userIdField.GetValue(), \
+				'enable_toast_notifications': settingsDialog.notificationCheckbox.GetValue(), 'shorten_urls': settingsDialog.shortenUrlsCheckbox.GetValue(), \
+				'image_format': settingsDialog.imageFormat.GetValue(), 'image_quality': settingsDialog.imageQuality.GetValue(), \
+				'filename_prefix': settingsDialog.filenamePrefix.GetValue(), 'screenshot_save_directory': settingsDialog.screenshotSaveLocation.GetValue(), \
+				'hot_key1_modifier': settingsDialog.hotKey1Modifier.GetValue(), \
+				'hot_key1_key_code': settingsDialog.hotKey1KeyCode.GetValue(), 'hot_key2_modifier': settingsDialog.hotKey2Modifier.GetValue(), \
+				'hot_key2_key_code': settingsDialog.hotKey2KeyCode.GetValue(),
+				'resize_image': settingsDialog.resizeImageCheckbox.GetValue(), 'resize_value': settingsDialog.resizeImageValue.GetValue()})
 				settings.loadSettings()
 				
 				# Re-register the hot-keys
@@ -192,11 +192,10 @@ class SettingsDialog():
 		self.notificationCheckbox = xrc.XRCCTRL(self.dialog, 'ID_ENOTIFICATIONS')
 		self.shortenUrlsCheckbox = xrc.XRCCTRL(self.dialog, 'ID_SHORTEN_URL')
 		
+		self.screenshotSaveLocation = xrc.XRCCTRL(self.dialog, 'ID_SAVE_DIRECTORY')
 		self.imageFormat = xrc.XRCCTRL(self.dialog, 'ID_IMAGE_FORMAT')
 		self.imageQuality = xrc.XRCCTRL(self.dialog, 'ID_IMAGE_QUALITY')
 		self.filenamePrefix = xrc.XRCCTRL(self.dialog, 'ID_FILENAME_PREFIX')
-		
-		self.screenshotSaveLocation = xrc.XRCCTRL(self.dialog, 'ID_SAVE_DIRECTORY')
 		
 		self.hotKey1Modifier = xrc.XRCCTRL(self.dialog, 'ID_HOTKEY1_KEY1')
 		self.hotKey1KeyCode = xrc.XRCCTRL(self.dialog, 'ID_HOTKEY1_KEY2')
@@ -218,33 +217,27 @@ class SettingsDialog():
 	def populateDialog(self):
 		settings.loadSettings()
 		
-		self.copyUrlToClipboardCheckBox.SetValue(True if settings.settings['copyUrlToClipboard'] == '1' else False)
+		self.userIdField.SetValue(settings.settings['user_id'])
 		
-		if settings.settings['copyUrlToClipboard'] == '1':
-			self.userIdField.Enable(True)
-		else:
-			self.userIdField.Enable(False)
+		self.copyUrlToClipboardCheckBox.SetValue(True if settings.settings['copy_url_to_clipboard'] == '1' else False)
+		self.userIdField.Enable(True if settings.settings['copy_url_to_clipboard'] == '1' else False)
+		self.shortenUrlsCheckbox.SetValue(True if settings.settings['shorten_urls'] == '1' else False)
+		self.notificationCheckbox.SetValue(True if settings.settings['enable_toast_notifications'] == '1' else False)
 		
-		self.userIdField.SetValue(settings.settings['userId'])
-		self.notificationCheckbox.SetValue(True if settings.settings['enableToastNotifications'] == '1' else False)
-		self.shortenUrlsCheckbox.SetValue(True if settings.settings['shortenURLs'] == '1' else False)
+		self.screenshotSaveLocation.SetValue(os.path.join(screengrab.publicFolderPath, settings.settings['screenshot_save_directory']))
+		self.imageFormat.SetStringSelection(settings.settings['image_format'])
+		self.imageQuality.Enable(True if settings.settings['image_format'] == 'JPEG' else False)
+		self.imageQuality.SetStringSelection(settings.settings['image_quality'])
+		self.filenamePrefix.SetValue(settings.settings['filename_prefix'])
 		
-		self.imageFormat.SetStringSelection(settings.settings['imageFormat'])
-		self.imageQuality.Enable(True if settings.settings['imageFormat'] == 'JPEG' else False)
-			
-		self.imageQuality.SetStringSelection(settings.settings['imageQuality'])
-		self.filenamePrefix.SetValue(settings.settings['filenamePrefix'])
+		self.hotKey1Modifier.SetStringSelection(settings.settings['hot_key1_modifier'])
+		self.hotKey1KeyCode.SetStringSelection(settings.settings['hot_key1_key_code'])
+		self.hotKey2Modifier.SetStringSelection(settings.settings['hot_key2_modifier'])
+		self.hotKey2KeyCode.SetStringSelection(settings.settings['hot_key2_key_code'])
 		
-		self.screenshotSaveLocation.SetValue(os.path.join(screengrab.publicFolderPath, settings.settings['screenshotSaveDirectory']))
-		
-		self.hotKey1Modifier.SetStringSelection(settings.settings['hotKey1Modifier'])
-		self.hotKey1KeyCode.SetStringSelection(settings.settings['hotKey1KeyCode'])
-		self.hotKey2Modifier.SetStringSelection(settings.settings['hotKey2Modifier'])
-		self.hotKey2KeyCode.SetStringSelection(settings.settings['hotKey2KeyCode'])
-		
-		self.resizeImageCheckbox.SetValue(True if settings.settings['resizeImage'] == '1' else False)
-		self.resizeImageValue.Enable(True if settings.settings['resizeImage'] == '1' else False)
-		self.resizeImageValue.SetStringSelection(settings.settings['resizeValue'])
+		self.resizeImageCheckbox.SetValue(True if settings.settings['resize_image'] == '1' else False)
+		self.resizeImageValue.Enable(True if settings.settings['resize_image'] == '1' else False)
+		self.resizeImageValue.SetStringSelection(settings.settings['resize_value'])
 		
 	def chooseSaveLocationDirectory(self):
 		dialog = wx.DirDialog(None, "Please choose the directory where the screenshots will be saved (relative to Dropbox public directory):", style = 1, defaultPath = self.screenshotSaveLocation.GetValue())
@@ -268,7 +261,7 @@ class SettingsDialog():
 	def onItemSelect(self, event):
 		# Same hot-key can't be used for both actions
 		if self.hotKey1Modifier.GetValue() == self.hotKey2Modifier.GetValue() and self.hotKey1KeyCode.GetValue() == self.hotKey2KeyCode.GetValue():
-			wx.MessageBox("Both actions can't have same hot-keys", "ERROR")
+			wx.MessageBox("Both actions can't have same hot-keys", "Error")
 			
 			# Re-populate the dialog with the saved data
 			self.populateDialog()
@@ -283,7 +276,7 @@ class SettingsDialog():
 			if directory.count(screengrab.publicFolderPath) == 1:
 				self.screenshotSaveLocation.SetValue(directory)
 			else:
-				 wx.MessageBox("The directory must be located inside the Dropbox Public directory", "ERROR", wx.ICON_INFORMATION)
+				 wx.MessageBox("The directory must be located inside the Dropbox Public directory", "Error", wx.ICON_INFORMATION)
 		
 	def OnClose(self, event):
 		self.Destroy()
@@ -334,7 +327,7 @@ class DropboxScreenGrabber(wx.App):
 		self.instance = wx.SingleInstanceChecker(self.name)
 		
 		if self.instance.IsAnotherRunning():
-			wx.MessageBox("Another instance of the program is already running", "ERROR")
+			wx.MessageBox("Another instance of the program is already running", "Error")
 			
 			return False
 		

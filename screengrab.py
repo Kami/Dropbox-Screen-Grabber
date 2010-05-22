@@ -108,7 +108,7 @@ def get_current_active_window_placement():
 	
 	return (maxposX, maxposY, normalposX, normalposY)
 
-def grab_screenshot(fullScreen = 'true', copyUrlIntoClipboard = 'false', userId = ''):
+def grab_screenshot(fullScreen = True, copyUrlIntoClipboard = False, userId = ''):
 	"""
 	Grab a screenshot.
 	
@@ -118,39 +118,39 @@ def grab_screenshot(fullScreen = 'true', copyUrlIntoClipboard = 'false', userId 
 
 	Returns: none
 	"""
-	if fullScreen == 'true':
+	if fullScreen:
 		image = ImageGrab.grab()
 	else:
 		image = ImageGrab.grab(get_current_active_window_placement())
 
 	time = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
-	fileName = '%s_%s.%s' % (settings.settings['filenamePrefix'], time,
-							('png' if settings.settings['imageFormat'] == 'PNG' else 'jpg'))
+	fileName = '%s_%s.%s' % (settings.settings['filename_prefix'], time,
+							('png' if settings.settings['image_format'] == 'PNG' else 'jpg'))
 	
 	settings.loadSettings()
-	saveFolderPath = os.path.join(publicFolderPath, settings.settings['screenshotSaveDirectory'])
+	saveFolderPath = os.path.join(publicFolderPath, settings.settings['screenshot_save_directory'])
 	saveLocation = os.path.join(saveFolderPath, fileName)  
 	
 	# Resize the image
-	if settings.settings['resizeImage'] == '1':
-		resizeValue = (float(settings.settings['resizeValue'][:-1]) / 100)
+	if settings.settings['resize_image'] == '1':
+		resizeValue = (float(settings.settings['resize_value'][:-1]) / 100)
 		image = image.resize([int(size * resizeValue) for size in image.size], Image.ANTIALIAS)
 		
 	# Save it
-	if settings.settings['imageFormat'] == 'JPEG':
+	if settings.settings['image_format'] == 'JPEG':
 		try:
 			quality = [value[0] for value in JPEG_QUALITY_CHOICES \
-					if value[1] == settings.settings['imageQuality']][0]
+					if value[1] == settings.settings['image_quality']][0]
 			quality = int(quality)
 		except IndexError:
 			quality = 100
 
-		image.save(saveLocation, settings.settings['imageFormat'], quality = quality)
+		image.save(saveLocation, settings.settings['image_format'], quality = quality)
 	else:
-		image.save(saveLocation, settings.settings['imageFormat'], optimize = True)
+		image.save(saveLocation, settings.settings['image_format'], optimize = True)
 	
 	# Copy file URL to the clipboard
-	if copyUrlIntoClipboard == 'true' and userId != '':
+	if copyUrlIntoClipboard and userId != '':
 		copy_url_to_clipboard(userId, fileName)
 		
 	return fileName
@@ -165,15 +165,15 @@ def copy_url_to_clipboard(userId, fileName):
 	Returns: none
 	"""
 	
-	if settings.settings['screenshotSaveDirectory'] != '':
-		saveDirectory = settings.settings['screenshotSaveDirectory'].replace('\\', '/')
+	if settings.settings['screenshot_save_directory'] != '':
+		saveDirectory = settings.settings['screenshot_save_directory'].replace('\\', '/')
 		saveDirectory = saveDirectory.replace(' ', '%20')
 		publicURL = '%s/u/%s/%s/%s' % (DROPBOX_PUBLIC_URL, userId, saveDirectory, fileName)
 	else:
 		publicURL = '%s/u/%s/%s' % (DROPBOX_PUBLIC_URL, userId, fileName)
 		
 	# If URL shortening is enabled, shorten the URL
-	if settings.settings['shortenURLs'] == '1':
+	if settings.settings['shorten_urls'] == '1':
 		short_url = shorten_url(publicURL)
 		
 		if short_url:
