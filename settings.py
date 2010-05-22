@@ -21,7 +21,9 @@ settings = {
 			'hotKey1Modifier': 'Shift',
 			'hotKey1KeyCode': 'F10',
 			'hotKey2Modifier': 'Shift',
-			'hotKey2KeyCode': 'F11'
+			'hotKey2KeyCode': 'F11',
+			'resizeImage': '0',
+			'resizeValue': '95%'
 			}
 
 modifiers = {
@@ -53,6 +55,9 @@ def loadSettings():
 	settings['hotKey1KeyCode'] = config.Read('hot_key1_key_code', 'F10')
 	settings['hotKey2Modifier'] = config.Read('hot_key2_modifier', 'Shift')
 	settings['hotKey2KeyCode'] = config.Read('hot_key2_key_code', 'F11')
+	
+	settings['resizeImage'] = config.Read('resize_image', '0')
+	settings['resizeValue'] = config.Read('resize_value', '95%')
 
 def saveSettings(settings):
 	config = wx.Config('dropbox_screen_grabber')
@@ -74,6 +79,9 @@ def saveSettings(settings):
 	config.Write('hot_key1_key_code', str(settings['hotKey1KeyCode']))
 	config.Write('hot_key2_modifier', str(settings['hotKey2Modifier']))
 	config.Write('hot_key2_key_code', str(settings['hotKey2KeyCode']))
+	
+	config.Write('resize_image', '1' if settings['resizeImage'] == True else '0')
+	config.Write('resize_value', str(settings['resizeValue']))
 	
 def get_latest_version():
 	request = urllib2.Request(UPDATE_CHECK_URL)

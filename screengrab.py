@@ -131,7 +131,12 @@ def grab_screenshot(fullScreen = 'true', copyUrlIntoClipboard = 'false', userId 
 	saveFolderPath = os.path.join(publicFolderPath, settings.settings['screenshotSaveDirectory'])
 	saveLocation = os.path.join(saveFolderPath, fileName)  
 	
-	# Save a screenshot to the Dropbox public folder and (optionally) copy the file url into the clipboard
+	# Resize the image
+	if settings.settings['resizeImage'] == '1':
+		resizeValue = (float(settings.settings['resizeValue'][:-1]) / 100)
+		image = image.resize([int(size * resizeValue) for size in image.size], Image.ANTIALIAS)
+		
+	# Save it
 	if settings.settings['imageFormat'] == 'JPEG':
 		try:
 			quality = [value[0] for value in JPEG_QUALITY_CHOICES \
@@ -144,6 +149,7 @@ def grab_screenshot(fullScreen = 'true', copyUrlIntoClipboard = 'false', userId 
 	else:
 		image.save(saveLocation, settings.settings['imageFormat'], optimize = True)
 	
+	# Copy file URL to the clipboard
 	if copyUrlIntoClipboard == 'true' and userId != '':
 		copy_url_to_clipboard(userId, fileName)
 		

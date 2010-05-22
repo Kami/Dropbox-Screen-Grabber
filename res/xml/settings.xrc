@@ -481,6 +481,78 @@
                         </object>
                     </object>
                 </object>
+                <object class="notebookpage">
+                    <label>Advanced</label>
+                    <object class="wxPanel" name="AdvancedDialog">
+                        <object class="wxBoxSizer">
+                            <orient>wxVERTICAL</orient>
+                            <object class="sizeritem">
+                                <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT|wxTOP</flag>
+                                <border>5</border>
+                                <object class="wxBoxSizer">
+                                    <orient>wxHORIZONTAL</orient>
+                                    <object class="sizeritem">
+                                        <flag>wxALIGN_CENTER|wxLEFT|wxRIGHT|wxTOP</flag>
+                                        <border>5</border>
+                                        <object class="wxStaticText" name="ID_TEXT">
+                                            <font>
+                                                <size>10</size>
+                                                <weight>bold</weight>
+                                                <family>swiss</family>
+                                            </font>
+                                            <label>Advanced settings</label>
+                                        </object>
+                                    </object>
+                                </object>
+                            </object>
+                            <object class="sizeritem">
+                                <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT|wxTOP</flag>
+                                <border>5</border>
+                                <object class="wxBoxSizer">
+                                    <orient>wxHORIZONTAL</orient>
+                                    <object class="sizeritem">
+                                        <flag>wxGROW|wxALIGN_CENTER_HORIZONTAL|wxALL</flag>
+                                        <border>5</border>
+                                        <object class="wxCheckBox" name="ID_RESIZE_IMAGE">
+                                            <label>Automatically resize image before saving</label>
+                                        </object>
+                                    </object>
+                                </object>
+                            </object>
+                            <object class="sizeritem">
+                                <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                <border>5</border>
+                                <object class="wxBoxSizer">
+                                    <orient>wxHORIZONTAL</orient>
+                                    <object class="sizeritem">
+                                        <flag>wxALIGN_CENTER|wxALL</flag>
+                                        <border>5</border>
+                                        <object class="wxStaticText" name="ID_TEXT">
+                                            <label>Value:</label>
+                                        </object>
+                                    </object>
+                                    <object class="sizeritem">
+                                        <flag>wxALIGN_CENTER|wxALL</flag>
+                                        <border>5</border>
+                                        <object class="wxComboBox" name="ID_RESIZE_VALUE">
+                                            <size>80,-1</size>
+                                            <style>wxCB_DROPDOWN|wxCB_READONLY</style>
+                                            <content>
+                                                <item>40%</item>
+                                                <item>50%</item>
+                                                <item>60%</item>
+                                                <item>70%</item>
+                                                <item>80%</item>
+                                                <item>90%</item>
+                                                <item>95%</item>
+                                            </content>
+                                        </object>
+                                    </object>
+                                </object>
+                            </object>
+                        </object>
+                    </object>
+                </object>
             </object>
         </object>
         <object class="sizeritem">
@@ -965,6 +1037,76 @@
                                 </object>
                             </object>
                         </object>
+                    </object>
+                </object>
+            </object>
+        </object>
+    </object>
+</object>
+
+<object class="wxPanel" name="AdvancedDialog">
+    <object class="wxBoxSizer">
+        <orient>wxVERTICAL</orient>
+        <object class="sizeritem">
+            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT|wxTOP</flag>
+            <border>5</border>
+            <object class="wxBoxSizer">
+                <orient>wxHORIZONTAL</orient>
+                <object class="sizeritem">
+                    <flag>wxALIGN_CENTER|wxLEFT|wxRIGHT|wxTOP</flag>
+                    <border>5</border>
+                    <object class="wxStaticText" name="ID_TEXT">
+                        <font>
+                            <size>10</size>
+                            <weight>bold</weight>
+                            <family>swiss</family>
+                        </font>
+                        <label>Advanced settings</label>
+                    </object>
+                </object>
+            </object>
+        </object>
+        <object class="sizeritem">
+            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT|wxTOP</flag>
+            <border>5</border>
+            <object class="wxBoxSizer">
+                <orient>wxHORIZONTAL</orient>
+                <object class="sizeritem">
+                    <flag>wxGROW|wxALIGN_CENTER_HORIZONTAL|wxALL</flag>
+                    <border>5</border>
+                    <object class="wxCheckBox" name="ID_RESIZE_IMAGE">
+                        <label>Automatically resize image before saving</label>
+                    </object>
+                </object>
+            </object>
+        </object>
+        <object class="sizeritem">
+            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+            <border>5</border>
+            <object class="wxBoxSizer">
+                <orient>wxHORIZONTAL</orient>
+                <object class="sizeritem">
+                    <flag>wxALIGN_CENTER|wxALL</flag>
+                    <border>5</border>
+                    <object class="wxStaticText" name="ID_TEXT">
+                        <label>Value:</label>
+                    </object>
+                </object>
+                <object class="sizeritem">
+                    <flag>wxALIGN_CENTER|wxALL</flag>
+                    <border>5</border>
+                    <object class="wxComboBox" name="ID_RESIZE_VALUE">
+                        <size>80,-1</size>
+                        <style>wxCB_DROPDOWN|wxCB_READONLY</style>
+                        <content>
+                            <item>40%</item>
+                            <item>50%</item>
+                            <item>60%</item>
+                            <item>70%</item>
+                            <item>80%</item>
+                            <item>90%</item>
+                            <item>95%</item>
+                        </content>
                     </object>
                 </object>
             </object>

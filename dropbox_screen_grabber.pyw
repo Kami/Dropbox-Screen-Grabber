@@ -158,7 +158,8 @@ Available hot-keys:
 				'filenamePrefix': settingsDialog.filenamePrefix.GetValue(), 'screenshotSaveDirectory': settingsDialog.screenshotSaveLocation.GetValue(), \
 				'hotKey1Modifier': settingsDialog.hotKey1Modifier.GetValue(), \
 				'hotKey1KeyCode': settingsDialog.hotKey1KeyCode.GetValue(), 'hotKey2Modifier': settingsDialog.hotKey2Modifier.GetValue(), \
-				'hotKey2KeyCode': settingsDialog.hotKey2KeyCode.GetValue()})
+				'hotKey2KeyCode': settingsDialog.hotKey2KeyCode.GetValue(),
+				'resizeImage': settingsDialog.resizeImageCheckbox.GetValue(), 'resizeValue': settingsDialog.resizeImageValue.GetValue()})
 				settings.loadSettings()
 				
 				# Re-register the hot-keys
@@ -203,6 +204,9 @@ class SettingsDialog():
 		self.hotKey2Modifier = xrc.XRCCTRL(self.dialog, 'ID_HOTKEY2_KEY1')
 		self.hotKey2KeyCode = xrc.XRCCTRL(self.dialog, 'ID_HOTKEY2_KEY2')
 		
+		self.resizeImageCheckbox = xrc.XRCCTRL(self.dialog, 'ID_RESIZE_IMAGE')
+		self.resizeImageValue = xrc.XRCCTRL(self.dialog, 'ID_RESIZE_VALUE')
+		
 		# Dialog events
 		self.dialog.Bind(wx.EVT_COMBOBOX, self.onItemSelect)
 		self.dialog.Bind(wx.EVT_CHECKBOX, self.onStateChange)
@@ -226,11 +230,7 @@ class SettingsDialog():
 		self.shortenUrlsCheckbox.SetValue(True if settings.settings['shortenURLs'] == '1' else False)
 		
 		self.imageFormat.SetStringSelection(settings.settings['imageFormat'])
-		
-		if settings.settings['imageFormat'] == 'JPEG':
-			self.imageQuality.Enable(True)
-		else:
-			self.imageQuality.Enable(False)
+		self.imageQuality.Enable(True if settings.settings['imageFormat'] == 'JPEG' else False)
 			
 		self.imageQuality.SetStringSelection(settings.settings['imageQuality'])
 		self.filenamePrefix.SetValue(settings.settings['filenamePrefix'])
@@ -241,6 +241,10 @@ class SettingsDialog():
 		self.hotKey1KeyCode.SetStringSelection(settings.settings['hotKey1KeyCode'])
 		self.hotKey2Modifier.SetStringSelection(settings.settings['hotKey2Modifier'])
 		self.hotKey2KeyCode.SetStringSelection(settings.settings['hotKey2KeyCode'])
+		
+		self.resizeImageCheckbox.SetValue(True if settings.settings['resizeImage'] == '1' else False)
+		self.resizeImageValue.Enable(True if settings.settings['resizeImage'] == '1' else False)
+		self.resizeImageValue.SetStringSelection(settings.settings['resizeValue'])
 		
 	def chooseSaveLocationDirectory(self):
 		dialog = wx.DirDialog(None, "Please choose the directory where the screenshots will be saved (relative to Dropbox public directory):", style = 1, defaultPath = self.screenshotSaveLocation.GetValue())
@@ -257,6 +261,9 @@ class SettingsDialog():
 		if event.GetEventObject() == self.copyUrlToClipboardCheckBox:
 			self.userIdField.Enable(True if self.copyUrlToClipboardCheckBox.IsChecked() else False)
 			self.shortenUrlsCheckbox.Enable(True if self.copyUrlToClipboardCheckBox.IsChecked() else False)
+		
+		if event.GetEventObject() == self.resizeImageCheckbox:
+			self.resizeImageValue.Enable(True if self.resizeImageCheckbox.IsChecked() else False)
 		
 	def onItemSelect(self, event):
 		# Same hot-key can't be used for both actions
