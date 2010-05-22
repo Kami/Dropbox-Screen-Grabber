@@ -42,8 +42,7 @@ def get_dropbox_path():
 
 	Returns: string
 	"""
-	
-	import ctypes, base64, pickle, sqlite3, os
+	import ctypes, base64, pickle, sqlite3
 	is_windows = True
 	
 	try:
@@ -105,7 +104,6 @@ def get_current_active_window_placement():
 
 	Returns: tuple with 4 coordinates (left, upper, right, lower)
 	"""
-	
 	flags, showcmd, (xy, yx), (minposX, minposY), (maxposX, maxposY, normalposX, normalposY) = win32gui.GetWindowPlacement(win32gui.GetForegroundWindow())
 	
 	return (maxposX, maxposY, normalposX, normalposY)
@@ -120,31 +118,30 @@ def grab_screenshot(fullScreen = 'true', copyUrlIntoClipboard = 'false', userId 
 
 	Returns: none
 	"""
-	
 	if fullScreen == 'true':
 		image = ImageGrab.grab()
 	else:
 		image = ImageGrab.grab(get_current_active_window_placement())
-	 
+
 	time = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
 	fileName = 'screengrab_%s.%s' % (time, ('png' if settings.settings['imageFormat'] == 'PNG' else 'jpg'))
 	
-	settings.loadSettings()   
+	settings.loadSettings()
 	saveFolderPath = os.path.join(publicFolderPath, settings.settings['screenshotSaveDirectory'])
 	saveLocation = os.path.join(saveFolderPath, fileName)  
 	
-	# Save a screenshot to the Dropbox public folder and (optionaly) copy the file url into the clipboard
+	# Save a screenshot to the Dropbox public folder and (optionally) copy the file url into the clipboard
 	if settings.settings['imageFormat'] == 'JPEG':
 		try:
 			quality = [value[0] for value in JPEG_QUALITY_CHOICES \
 					if value[1] == settings.settings['imageQuality']][0]
 			quality = int(quality)
 		except IndexError:
-			 quality = 100
-			 
+			quality = 100
+
 		image.save(saveLocation, settings.settings['imageFormat'], quality = quality)
 	else:
-		 image.save(saveLocation, settings.settings['imageFormat'], optimize = True)
+		image.save(saveLocation, settings.settings['imageFormat'], optimize = True)
 	
 	if copyUrlIntoClipboard == 'true' and userId != '':
 		copy_url_to_clipboard(userId, fileName)
@@ -179,8 +176,6 @@ def copy_url_to_clipboard(userId, fileName):
 	win32clipboard.EmptyClipboard()
 	win32clipboard.SetClipboardText(publicURL)
 	win32clipboard.CloseClipboard()
-	
-publicFolderPath = os.path.join(get_dropbox_path(), 'Public')
 
 def shorten_url(long_url):
 	"""
@@ -203,3 +198,5 @@ def shorten_url(long_url):
 	
 	url = url.strip()
 	return url
+
+publicFolderPath = os.path.join(get_dropbox_path(), 'Public')

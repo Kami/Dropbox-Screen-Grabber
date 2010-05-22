@@ -267,7 +267,7 @@ class SettingsDialog():
 			if directory.count(screengrab.publicFolderPath) == 1:
 				self.screenshotSaveLocation.SetValue(directory)
 			else:
-				 wx.MessageBox("This directory must be located inside the Dropbox Public directory", "ERROR", wx.ICON_INFORMATION)
+				 wx.MessageBox("The directory must be located inside the Dropbox Public directory", "ERROR", wx.ICON_INFORMATION)
 		
 	def OnClose(self, event):
 		self.Destroy()
@@ -314,7 +314,7 @@ class NotificationBox(TB.ToasterBox):
 
 class DropboxScreenGrabber(wx.App):
 	def OnInit(self):
-		self.name = APP_NAME;
+		self.name = APP_NAME
 		self.instance = wx.SingleInstanceChecker(self.name)
 		
 		if self.instance.IsAnotherRunning():

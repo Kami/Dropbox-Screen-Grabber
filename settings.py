@@ -7,6 +7,8 @@ import wx
 
 import screengrab
 
+UPDATE_CHECK_URL = 'http://dl.getdropbox.com/u/521887/dropbox_screen_grabber/latest'
+
 settings = {
 			'copyUrlToClipboard': '0',
 			'userId': '',
@@ -32,8 +34,6 @@ keyCodes = {
 			'F12': win32con.VK_F12
 			}
 
-UPDATE_CHECK_URL = 'http://dl.getdropbox.com/u/521887/dropbox_screen_grabber/latest'
-
 def loadSettings():
 	config = wx.Config('dropbox_screen_grabber')
 	
@@ -50,7 +50,7 @@ def loadSettings():
 	settings['hotKey1KeyCode'] = config.Read('hot_key1_key_code', 'F10')
 	settings['hotKey2Modifier'] = config.Read('hot_key2_modifier', 'Shift')
 	settings['hotKey2KeyCode'] = config.Read('hot_key2_key_code', 'F11')
-  
+
 def saveSettings(settings):
 	config = wx.Config('dropbox_screen_grabber')
 	
