@@ -277,7 +277,7 @@ class TaskBarIcon(wx.TaskBarIcon):
 		wx.TaskBarIcon.__init__(self)
 		
 		self.icon = wx.Icon(icon, wx.BITMAP_TYPE_ICO)
-		self.SetIcon(self.icon, '')
+		self.SetIcon(self.icon, APP_NAME)
 
 	def CreatePopupMenu(self):
 		# Create the taskbar icon popup menu
