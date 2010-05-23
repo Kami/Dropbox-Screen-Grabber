@@ -27,6 +27,9 @@ settings = {
 			
 			'resize_image': '0',
 			'resize_value': '95%',
+			'auto_grab': '0',
+			'auto_grab_type': 'Full screen',
+			'auto_grab_interval': '60 minutes',
 			}
 
 modifiers = {
@@ -63,6 +66,16 @@ def saveSettings(settingsNew):
 	
 	if not saveDirectory:
 		config.Write('screenshot_save_directory', '')
+		
+def getAutoGrabIntervalValueInMs(interval):
+	"""
+	Parses the input string and returns the auto-grab interval in
+	milliseconds.
+	"""
+	interval =  int(interval[:interval.find(' ')])
+	interval = (interval * 60 * 1000)
+	
+	return interval
 	
 def get_latest_version():
 	request = urllib2.Request(UPDATE_CHECK_URL)

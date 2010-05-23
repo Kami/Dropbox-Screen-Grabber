@@ -27,9 +27,8 @@
                                             <font>
                                                 <size>10</size>
                                                 <weight>bold</weight>
-                                                <family>swiss</family>
                                             </font>
-                                            <label>Account</label>
+                                            <label>Dropbox account</label>
                                         </object>
                                     </object>
                                 </object>
@@ -68,7 +67,6 @@
                                             <font>
                                                 <size>10</size>
                                                 <weight>bold</weight>
-                                                <family>swiss</family>
                                             </font>
                                             <label>File URL</label>
                                         </object>
@@ -158,7 +156,6 @@
                                             <font>
                                                 <size>10</size>
                                                 <weight>bold</weight>
-                                                <family>swiss</family>
                                             </font>
                                             <label>Screenshot folder location</label>
                                         </object>
@@ -200,7 +197,6 @@
                                             <font>
                                                 <size>10</size>
                                                 <weight>bold</weight>
-                                                <family>swiss</family>
                                             </font>
                                             <label>Image settings</label>
                                         </object>
@@ -342,7 +338,6 @@
                                             <font>
                                                 <size>10</size>
                                                 <weight>bold</weight>
-                                                <family>swiss</family>
                                             </font>
                                             <label>System-wide hot keys</label>
                                         </object>
@@ -498,9 +493,8 @@
                                             <font>
                                                 <size>10</size>
                                                 <weight>bold</weight>
-                                                <family>swiss</family>
                                             </font>
-                                            <label>Advanced settings</label>
+                                            <label>Automatic resizing</label>
                                         </object>
                                     </object>
                                 </object>
@@ -528,7 +522,8 @@
                                         <flag>wxALIGN_CENTER|wxALL</flag>
                                         <border>5</border>
                                         <object class="wxStaticText" name="ID_TEXT">
-                                            <label>Value:</label>
+                                            <size>100,-1</size>
+                                            <label>Scale down to:</label>
                                         </object>
                                     </object>
                                     <object class="sizeritem">
@@ -545,6 +540,100 @@
                                                 <item>80%</item>
                                                 <item>90%</item>
                                                 <item>95%</item>
+                                            </content>
+                                        </object>
+                                    </object>
+                                </object>
+                            </object>
+                            <object class="sizeritem">
+                                <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT|wxTOP</flag>
+                                <border>5</border>
+                                <object class="wxBoxSizer">
+                                    <orient>wxHORIZONTAL</orient>
+                                    <object class="sizeritem">
+                                        <flag>wxALIGN_CENTER|wxLEFT|wxRIGHT|wxTOP</flag>
+                                        <border>5</border>
+                                        <object class="wxStaticText" name="ID_TEXT">
+                                            <font>
+                                                <size>10</size>
+                                                <weight>bold</weight>
+                                            </font>
+                                            <label>Automatic grabing</label>
+                                        </object>
+                                    </object>
+                                </object>
+                            </object>
+                            <object class="sizeritem">
+                                <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT|wxTOP</flag>
+                                <border>5</border>
+                                <object class="wxBoxSizer">
+                                    <orient>wxHORIZONTAL</orient>
+                                    <object class="sizeritem">
+                                        <flag>wxGROW|wxALIGN_CENTER_HORIZONTAL|wxALL</flag>
+                                        <border>5</border>
+                                        <object class="wxCheckBox" name="ID_AUTO_INTERVAL">
+                                            <tooltip>Check this checkbox if you want to automatically capture and save screenshot at a defined time interval</tooltip>
+                                            <label>Automatically grab screenshot at defined interval</label>
+                                        </object>
+                                    </object>
+                                </object>
+                            </object>
+                            <object class="sizeritem">
+                                <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                <border>5</border>
+                                <object class="wxBoxSizer">
+                                    <orient>wxHORIZONTAL</orient>
+                                    <object class="sizeritem">
+                                        <flag>wxALIGN_CENTER|wxALL</flag>
+                                        <border>5</border>
+                                        <object class="wxStaticText" name="ID_TEXT">
+                                            <size>100,-1</size>
+                                            <label>Type:</label>
+                                        </object>
+                                    </object>
+                                    <object class="sizeritem">
+                                        <flag>wxALIGN_CENTER|wxALL</flag>
+                                        <border>5</border>
+                                        <object class="wxComboBox" name="ID_AUTO_INTERVAL_TYPE">
+                                            <size>130,-1</size>
+                                            <style>wxCB_DROPDOWN|wxCB_READONLY</style>
+                                            <content>
+                                                <item>Full screen</item>
+                                                <item>Active window</item>
+                                            </content>
+                                        </object>
+                                    </object>
+                                </object>
+                            </object>
+                            <object class="sizeritem">
+                                <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                <border>5</border>
+                                <object class="wxBoxSizer">
+                                    <orient>wxHORIZONTAL</orient>
+                                    <object class="sizeritem">
+                                        <flag>wxALIGN_CENTER|wxALL</flag>
+                                        <border>5</border>
+                                        <object class="wxStaticText" name="ID_TEXT">
+                                            <size>100,-1</size>
+                                            <label>Time interval:</label>
+                                        </object>
+                                    </object>
+                                    <object class="sizeritem">
+                                        <flag>wxALIGN_CENTER|wxALL</flag>
+                                        <border>5</border>
+                                        <object class="wxComboBox" name="ID_TIME_INTERVAL">
+                                            <size>130,-1</size>
+                                            <style>wxCB_DROPDOWN|wxCB_READONLY</style>
+                                            <content>
+                                                <item>1 minute</item>
+                                                <item>5 minutes</item>
+                                                <item>10 minutes</item>
+                                                <item>15 minutes</item>
+                                                <item>30 minutes</item>
+                                                <item>45 minutes</item>
+                                                <item>60 minutes</item>
+                                                <item>90 minutes</item>
+                                                <item>120 minutes</item>
                                             </content>
                                         </object>
                                     </object>
@@ -594,9 +683,8 @@
                         <font>
                             <size>10</size>
                             <weight>bold</weight>
-                            <family>swiss</family>
                         </font>
-                        <label>Account</label>
+                        <label>Dropbox account</label>
                     </object>
                 </object>
             </object>
@@ -635,7 +723,6 @@
                         <font>
                             <size>10</size>
                             <weight>bold</weight>
-                            <family>swiss</family>
                         </font>
                         <label>File URL</label>
                     </object>
@@ -723,7 +810,6 @@
                         <font>
                             <size>10</size>
                             <weight>bold</weight>
-                            <family>swiss</family>
                         </font>
                         <label>Screenshot folder location</label>
                     </object>
@@ -765,7 +851,6 @@
                         <font>
                             <size>10</size>
                             <weight>bold</weight>
-                            <family>swiss</family>
                         </font>
                         <label>Image settings</label>
                     </object>
@@ -905,7 +990,6 @@
                         <font>
                             <size>10</size>
                             <weight>bold</weight>
-                            <family>swiss</family>
                         </font>
                         <label>System-wide hot keys</label>
                     </object>
@@ -1059,9 +1143,8 @@
                         <font>
                             <size>10</size>
                             <weight>bold</weight>
-                            <family>swiss</family>
                         </font>
-                        <label>Advanced settings</label>
+                        <label>Automatic resizing</label>
                     </object>
                 </object>
             </object>
@@ -1089,7 +1172,8 @@
                     <flag>wxALIGN_CENTER|wxALL</flag>
                     <border>5</border>
                     <object class="wxStaticText" name="ID_TEXT">
-                        <label>Value:</label>
+                        <size>100,-1</size>
+                        <label>Scale down to:</label>
                     </object>
                 </object>
                 <object class="sizeritem">
@@ -1106,6 +1190,100 @@
                             <item>80%</item>
                             <item>90%</item>
                             <item>95%</item>
+                        </content>
+                    </object>
+                </object>
+            </object>
+        </object>
+        <object class="sizeritem">
+            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT|wxTOP</flag>
+            <border>5</border>
+            <object class="wxBoxSizer">
+                <orient>wxHORIZONTAL</orient>
+                <object class="sizeritem">
+                    <flag>wxALIGN_CENTER|wxLEFT|wxRIGHT|wxTOP</flag>
+                    <border>5</border>
+                    <object class="wxStaticText" name="ID_TEXT">
+                        <font>
+                            <size>10</size>
+                            <weight>bold</weight>
+                        </font>
+                        <label>Automatic grabing</label>
+                    </object>
+                </object>
+            </object>
+        </object>
+        <object class="sizeritem">
+            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT|wxTOP</flag>
+            <border>5</border>
+            <object class="wxBoxSizer">
+                <orient>wxHORIZONTAL</orient>
+                <object class="sizeritem">
+                    <flag>wxGROW|wxALIGN_CENTER_HORIZONTAL|wxALL</flag>
+                    <border>5</border>
+                    <object class="wxCheckBox" name="ID_AUTO_INTERVAL">
+                        <tooltip>Check this checkbox if you want to automatically capture and save screenshot at a defined time interval</tooltip>
+                        <label>Automatically grab screenshot at defined interval</label>
+                    </object>
+                </object>
+            </object>
+        </object>
+        <object class="sizeritem">
+            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+            <border>5</border>
+            <object class="wxBoxSizer">
+                <orient>wxHORIZONTAL</orient>
+                <object class="sizeritem">
+                    <flag>wxALIGN_CENTER|wxALL</flag>
+                    <border>5</border>
+                    <object class="wxStaticText" name="ID_TEXT">
+                        <size>100,-1</size>
+                        <label>Type:</label>
+                    </object>
+                </object>
+                <object class="sizeritem">
+                    <flag>wxALIGN_CENTER|wxALL</flag>
+                    <border>5</border>
+                    <object class="wxComboBox" name="ID_AUTO_INTERVAL_TYPE">
+                        <size>130,-1</size>
+                        <style>wxCB_DROPDOWN|wxCB_READONLY</style>
+                        <content>
+                            <item>Full screen</item>
+                            <item>Active window</item>
+                        </content>
+                    </object>
+                </object>
+            </object>
+        </object>
+        <object class="sizeritem">
+            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+            <border>5</border>
+            <object class="wxBoxSizer">
+                <orient>wxHORIZONTAL</orient>
+                <object class="sizeritem">
+                    <flag>wxALIGN_CENTER|wxALL</flag>
+                    <border>5</border>
+                    <object class="wxStaticText" name="ID_TEXT">
+                        <size>100,-1</size>
+                        <label>Time interval:</label>
+                    </object>
+                </object>
+                <object class="sizeritem">
+                    <flag>wxALIGN_CENTER|wxALL</flag>
+                    <border>5</border>
+                    <object class="wxComboBox" name="ID_TIME_INTERVAL">
+                        <size>130,-1</size>
+                        <style>wxCB_DROPDOWN|wxCB_READONLY</style>
+                        <content>
+                            <item>1 minute</item>
+                            <item>5 minutes</item>
+                            <item>10 minutes</item>
+                            <item>15 minutes</item>
+                            <item>30 minutes</item>
+                            <item>45 minutes</item>
+                            <item>60 minutes</item>
+                            <item>90 minutes</item>
+                            <item>120 minutes</item>
                         </content>
                     </object>
                 </object>

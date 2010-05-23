@@ -48,6 +48,7 @@ APP_NAME = 'Dropbox Screen Grabber'
 
 ID_HOT_KEY_FULL = 1
 ID_HOT_KEY_ACTIVE = 2
+ID_AUTO_GRAB_TIMER = 7
 
 ID_TAKE_SCREEN_FULL = 1
 ID_TAKE_SCREEN_ACTIVE = 2
@@ -63,8 +64,10 @@ class DropboxScreenGrabberFrame(wx.Frame):
 		# Load the user settings
 		settings.loadSettings()
 		
-		# Register the system-wide hot-keys and create the taskbar icon
+		# Register the system wide hot-keys
 		self.registerHotKeys()
+		
+		# Create the taskbar icon
 		self.taskBarIcon = TaskBarIcon('res/icons/application.ico')
 		
 		# Bind the taskbar icon menu events
@@ -73,6 +76,16 @@ class DropboxScreenGrabberFrame(wx.Frame):
 		self.taskBarIcon.Bind(wx.EVT_MENU, self.handleMenuAndHotKeyEvents, id = ID_UPDATE_CHECK)
 		self.taskBarIcon.Bind(wx.EVT_MENU, self.handleMenuAndHotKeyEvents, id = ID_EXIT)
 		
+		# Auto-grab screenshot timer
+		self.timer = wx.Timer(self, id = ID_AUTO_GRAB_TIMER)
+		self.Bind(wx.EVT_TIMER, self.grabScreenshot, self.timer)
+		
+		# If the auto-grab setting is enabled, start the timer
+		if settings.settings['auto_grab'] == '1':
+			interval = settings.getAutoGrabIntervalValueInMs(settings.settings['auto_grab_interval'])
+			
+			self.timer.Start(milliseconds = interval, oneShot = False)
+			
 		self.Bind(wx.EVT_CLOSE, self.OnCloseWindow)
 		
 	def registerHotKeys(self):
@@ -106,7 +119,6 @@ class DropboxScreenGrabberFrame(wx.Frame):
 			if (settings.settings['enable_toast_notifications'] == '1'):
 				self.showNotification(os.path.join(screengrab.publicFolderPath, fileName))
 		elif eventId == ID_UPDATE_CHECK:
-			
 			try:
 				(version, releaseDate, downloadUrl) = settings.get_latest_version()
 			except:
@@ -158,14 +170,26 @@ Available hot-keys:
 				'filename_prefix': settingsDialog.filenamePrefix.GetValue(), 'screenshot_save_directory': settingsDialog.screenshotSaveLocation.GetValue(), \
 				'hot_key1_modifier': settingsDialog.hotKey1Modifier.GetValue(), \
 				'hot_key1_key_code': settingsDialog.hotKey1KeyCode.GetValue(), 'hot_key2_modifier': settingsDialog.hotKey2Modifier.GetValue(), \
-				'hot_key2_key_code': settingsDialog.hotKey2KeyCode.GetValue(),
-				'resize_image': settingsDialog.resizeImageCheckbox.GetValue(), 'resize_value': settingsDialog.resizeImageValue.GetValue()})
+				'hot_key2_key_code': settingsDialog.hotKey2KeyCode.GetValue(), \
+				'resize_image': settingsDialog.resizeImageCheckbox.GetValue(), 'resize_value': settingsDialog.resizeImageValue.GetValue(), \
+				'auto_grab': settingsDialog.autoGrabCheckbox.GetValue(), 'auto_grab_type': settingsDialog.autoGrabType.GetValue(), \
+				'auto_grab_interval': settingsDialog.autoGrabInterval.GetValue()})
 				settings.loadSettings()
 				
 				# Re-register the hot-keys
 				self.unregisterHotKeys()
 				self.registerHotKeys()
 				
+				# Timer
+				autoGrab = settingsDialog.autoGrabCheckbox.GetValue()
+				if autoGrab:
+					interval = settingsDialog.autoGrabInterval.GetValue()
+					interval = settings.getAutoGrabIntervalValueInMs(interval)
+					
+					self.timer.Start(milliseconds = interval, oneShot = False)
+				else:
+					self.timer.Stop()
+					
 			settingsDialog.dialog.Destroy()
 		elif eventId == ID_EXIT:
 			self.Close(True)
@@ -173,6 +197,8 @@ Available hot-keys:
 	def OnCloseWindow(self, event):
 		# Unregister the hot-keys (should be done automatically, but just in case...), remove the taskbar icon and destroy the main window
 		self.unregisterHotKeys()
+		self.timer.Stop()
+		self.timer.Destroy()
 		self.taskBarIcon.RemoveIcon()
 		self.taskBarIcon.Destroy()
 		self.Reparent(None)
@@ -180,6 +206,24 @@ Available hot-keys:
 		
 		# Sometimes resources aren't released so only solution is to forcefully kill the process (yes, it's a bad idea, but the only one I can come up with atm...)
 		os.system("taskkill /PID %s /f" % os.getpid())
+		
+	def grabScreenshot(self, event):
+		eventId = event.GetId()
+		
+		if eventId == ID_TAKE_SCREEN_FULL:
+			fullScreen = True
+		elif eventId == ID_TAKE_SCREEN_ACTIVE:
+			fullScreen = False
+		elif eventId == ID_AUTO_GRAB_TIMER:
+			type = True if settings.settings['auto_grab_type'] == 'Full screen' else False
+		
+		copyUrlToClipboard = True if settings.settings['copy_url_to_clipboard'] == '1' else False
+		userId = settings.settings['user_id']
+			
+		fileName = screengrab.grab_screenshot(type, copyUrlToClipboard, userId)
+			
+		if (settings.settings['enable_toast_notifications'] == '1'):
+			self.showNotification(os.path.join(screengrab.publicFolderPath, fileName))
 
 class SettingsDialog():
 	def __init__(self, parent):
@@ -205,6 +249,9 @@ class SettingsDialog():
 		
 		self.resizeImageCheckbox = xrc.XRCCTRL(self.dialog, 'ID_RESIZE_IMAGE')
 		self.resizeImageValue = xrc.XRCCTRL(self.dialog, 'ID_RESIZE_VALUE')
+		self.autoGrabCheckbox = xrc.XRCCTRL(self.dialog, 'ID_AUTO_INTERVAL')
+		self.autoGrabType = xrc.XRCCTRL(self.dialog, 'ID_AUTO_INTERVAL_TYPE')
+		self.autoGrabInterval = xrc.XRCCTRL(self.dialog, 'ID_TIME_INTERVAL')
 		
 		# Dialog events
 		self.dialog.Bind(wx.EVT_COMBOBOX, self.onItemSelect)
@@ -239,6 +286,12 @@ class SettingsDialog():
 		self.resizeImageValue.Enable(True if settings.settings['resize_image'] == '1' else False)
 		self.resizeImageValue.SetStringSelection(settings.settings['resize_value'])
 		
+		self.autoGrabCheckbox.SetValue(True if settings.settings['auto_grab'] == '1' else False)
+		self.autoGrabType.Enable(True if settings.settings['auto_grab'] == '1' else False)
+		self.autoGrabType.SetStringSelection(settings.settings['auto_grab_type'])
+		self.autoGrabInterval.Enable(True if settings.settings['auto_grab'] == '1' else False)
+		self.autoGrabInterval.SetStringSelection(settings.settings['auto_grab_interval'])
+		
 	def chooseSaveLocationDirectory(self):
 		dialog = wx.DirDialog(None, "Please choose the directory where the screenshots will be saved (relative to Dropbox public directory):", style = 1, defaultPath = self.screenshotSaveLocation.GetValue())
 		
@@ -257,7 +310,11 @@ class SettingsDialog():
 		
 		if event.GetEventObject() == self.resizeImageCheckbox:
 			self.resizeImageValue.Enable(True if self.resizeImageCheckbox.IsChecked() else False)
-		
+			
+		if event.GetEventObject() == self.autoGrabCheckbox:
+			self.autoGrabType.Enable(True if self.autoGrabCheckbox.IsChecked() else False)
+			self.autoGrabInterval.Enable(True if self.autoGrabCheckbox.IsChecked() else False)
+			
 	def onItemSelect(self, event):
 		# Same hot-key can't be used for both actions
 		if self.hotKey1Modifier.GetValue() == self.hotKey2Modifier.GetValue() and self.hotKey1KeyCode.GetValue() == self.hotKey2KeyCode.GetValue():
