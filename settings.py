@@ -10,7 +10,7 @@ import ConfigParser
 
 UPDATE_CHECK_URL = 'http://dl.getdropbox.com/u/521887/dropbox_screen_grabber/latest'
 
-settings = {
+settingsDefault = {
 			'user_id': '',
 			'copy_url_to_clipboard': '0',
 			'shorten_urls': '0',
@@ -33,6 +33,8 @@ settings = {
 			'auto_grab_interval': '60 minutes',
 			}
 
+settings = {}
+
 modifiers = {
 			 'Ctrl': win32con.MOD_CONTROL,
 			 'Alt': win32con.MOD_ALT,
@@ -47,13 +49,13 @@ keyCodes = {
 def loadSettings():
 	config = wx.Config('dropbox_screen_grabber')
 	
-	for key, value in settings.iteritems():
+	for key, value in settingsDefault.iteritems():
 		settings[key] = config.Read(key, value)
 
 def saveSettings(settingsNew):
 	config = wx.Config('dropbox_screen_grabber')
 	
-	for key, value in settings.iteritems():
+	for key, value in settingsDefault.iteritems():
 		value = settingsNew[key]
 		
 		if type(value) == bool:
@@ -101,12 +103,18 @@ def importSettings(filePath):
 	
 	items = dict(config.items('general'))
 	settingsImported = dict([(k,v) for k, v in items.iteritems() \
-								if settings.has_key(k)])
+								if settingsDefault.has_key(k)])
 	
-	if len(settingsImported) != len(settings):
+	if len(settingsImported) != len(settingsDefault):
 		raise Exception('Could not parse settings file')
 	
 	saveSettings(settingsImported)
+	
+def restoreToDefault():
+	"""
+	Restore settings to default.
+	"""
+	saveSettings(settingsDefault)
 
 def get_latest_version():
 	request = urllib2.Request(UPDATE_CHECK_URL)

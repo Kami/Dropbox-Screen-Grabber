@@ -216,18 +216,19 @@ Available hot-keys:
 		elif eventId == ID_TAKE_SCREEN_ACTIVE:
 			fullScreen = False
 		elif eventId == ID_AUTO_GRAB_TIMER:
-			type = True if settings.settings['auto_grab_type'] == 'Full screen' else False
+			fullScreen = True if settings.settings['auto_grab_type'] == 'Full screen' else False
 		
 		copyUrlToClipboard = True if settings.settings['copy_url_to_clipboard'] == '1' else False
 		userId = settings.settings['user_id']
 			
-		fileName = screengrab.grab_screenshot(type, copyUrlToClipboard, userId)
+		fileName = screengrab.grab_screenshot(fullScreen, copyUrlToClipboard, userId)
 			
 		if (settings.settings['enable_toast_notifications'] == '1'):
 			self.showNotification(os.path.join(screengrab.publicFolderPath, fileName))
 
 class SettingsDialog():
 	def __init__(self, parent):
+		self.parent = parent
 		self.resource = xrc.XmlResource("res/xml/settings.xrc")
 		self.dialog = self.resource.LoadDialog(parent, "SettingsDialog")
 		
@@ -261,6 +262,7 @@ class SettingsDialog():
 		
 		self.dialog.Bind(wx.EVT_BUTTON, self.onButtonExportClick, id = xrc.XRCID('ID_SETTINGS_EXPORT'))
 		self.dialog.Bind(wx.EVT_BUTTON, self.onButtonImportClick, id = xrc.XRCID('ID_SETTINGS_IMPORT'))
+		self.dialog.Bind(wx.EVT_BUTTON, self.onButtonRestoreDefaultClick, id = xrc.XRCID('ID_SETTINGS_RESTORE'))
 		
 		# Fill the fields
 		self.populateDialog()
@@ -362,9 +364,26 @@ class SettingsDialog():
 			try:
 				settings.importSettings(path)
 				self.populateDialog()
+				
+				# Re-register the hot-keys
+				self.parent.unregisterHotKeys()
+				self.parent.registerHotKeys()
 				wx.MessageBox("Settings have been successfully imported from a file %s" % (filename), "Import settings", wx.ICON_INFORMATION)
-			except:
+			except Exception, e:
 				wx.MessageBox("Settings could not be imported", "Error", wx.ICON_ERROR)
+				
+	def onButtonRestoreDefaultClick(self, event):
+		dialog = wx.MessageDialog(None, "Are you sure you want to restore settings to default?", "Restore to default", style = wx.YES_NO)
+
+		if dialog.ShowModal() == wx.ID_YES:
+			settings.restoreToDefault()
+			self.populateDialog()
+			
+			# Re-register the hot-keys
+			self.parent.unregisterHotKeys()
+			self.parent.registerHotKeys()
+			
+			wx.MessageBox("Settings have been successfully restored to default", "Restore to default", wx.ICON_INFORMATION)
 				
 	def OnClose(self, event):
 		self.Destroy()
