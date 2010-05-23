@@ -6,7 +6,7 @@
 # Author: Tomaž Muraus (http://www.tomaz-muraus.info)
 # Version: 1.6
 # License: GPL
-
+#
 # Requirements:
 # - Windows (tested on Windows XP, Vista and 7)
 # - Microsoft Visual C++ 2008 runtime (http://www.microsoft.com/downloads/details.aspx?FamilyID=9b2da534-3e03-4391-8a4d-074b9f2bc1bf&displaylang=en)
@@ -26,6 +26,7 @@ __version__ = "1.6"
 
 import os
 import sys
+import datetime
 
 import wx
 import wx.lib.agw.toasterbox as TB
@@ -258,6 +259,9 @@ class SettingsDialog():
 		self.dialog.Bind(wx.EVT_CHECKBOX, self.onStateChange)
 		self.dialog.Bind(wx.EVT_BUTTON, self.onButtonClick, id = xrc.XRCID('ID_CHANGE_DIRECTORY'))
 		
+		self.dialog.Bind(wx.EVT_BUTTON, self.onButtonExportClick, id = xrc.XRCID('ID_SETTINGS_EXPORT'))
+		self.dialog.Bind(wx.EVT_BUTTON, self.onButtonImportClick, id = xrc.XRCID('ID_SETTINGS_IMPORT'))
+		
 		# Fill the fields
 		self.populateDialog()
 		
@@ -322,7 +326,7 @@ class SettingsDialog():
 			
 			# Re-populate the dialog with the saved data
 			self.populateDialog()
- 
+
 		if event.GetEventObject() == self.imageFormat:
 			self.imageQuality.Enable(True if self.imageFormat.GetValue() == 'JPEG' else False)
 			
@@ -333,8 +337,35 @@ class SettingsDialog():
 			if directory.count(screengrab.publicFolderPath) == 1:
 				self.screenshotSaveLocation.SetValue(directory)
 			else:
-				 wx.MessageBox("The directory must be located inside the Dropbox Public directory", "Error", wx.ICON_INFORMATION)
+				wx.MessageBox("The directory must be located inside the Dropbox Public directory", "Error", wx.ICON_ERROR)
+	
+	def onButtonExportClick(self, event):
+		dialog = wx.DirDialog(None, "Please choose the directory where the settings will be saved:", style = 1, \
+							 defaultPath = self.screenshotSaveLocation.GetValue())
 		
+		if dialog.ShowModal() == wx.ID_OK:
+			path = dialog.GetPath()
+			time = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
+			filename = '%s_%s.cfg' % ('settings', time)
+			
+			settings.exportSettings(os.path.join(path, filename))
+			wx.MessageBox("Settings has been successfully saved to %s" % (filename), "Export settings", wx.ICON_INFORMATION)
+			
+	def onButtonImportClick(self, event):
+		dialog = wx.FileDialog(None, "Please choose the Dropbox Screenshot Grabber settings file:", style = 1, \
+							wildcard = 'Settings files (*.cfg)|*.cfg')
+		
+		if dialog.ShowModal() == wx.ID_OK:
+			path = dialog.GetPath()
+			filename = dialog.GetFilename()
+			
+			try:
+				settings.importSettings(path)
+				self.populateDialog()
+				wx.MessageBox("Settings have been successfully imported from a file %s" % (filename), "Import settings", wx.ICON_INFORMATION)
+			except:
+				wx.MessageBox("Settings could not be imported", "Error", wx.ICON_ERROR)
+				
 	def OnClose(self, event):
 		self.Destroy()
 		

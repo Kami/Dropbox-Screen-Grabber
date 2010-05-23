@@ -639,6 +639,45 @@
                                     </object>
                                 </object>
                             </object>
+                            <object class="sizeritem">
+                                <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT|wxTOP</flag>
+                                <border>5</border>
+                                <object class="wxBoxSizer">
+                                    <orient>wxHORIZONTAL</orient>
+                                    <object class="sizeritem">
+                                        <flag>wxALIGN_CENTER|wxLEFT|wxRIGHT|wxTOP</flag>
+                                        <border>5</border>
+                                        <object class="wxStaticText" name="ID_TEXT">
+                                            <font>
+                                                <size>10</size>
+                                                <weight>bold</weight>
+                                            </font>
+                                            <label>Settings</label>
+                                        </object>
+                                    </object>
+                                </object>
+                            </object>
+                            <object class="sizeritem">
+                                <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                <border>5</border>
+                                <object class="wxBoxSizer">
+                                    <orient>wxHORIZONTAL</orient>
+                                    <object class="sizeritem">
+                                        <flag>wxALIGN_CENTER|wxALL</flag>
+                                        <border>5</border>
+                                        <object class="wxButton" name="ID_SETTINGS_EXPORT">
+                                            <label>Export</label>
+                                        </object>
+                                    </object>
+                                    <object class="sizeritem">
+                                        <flag>wxALIGN_CENTER|wxALL</flag>
+                                        <border>5</border>
+                                        <object class="wxButton" name="ID_SETTINGS_IMPORT">
+                                            <label>Import</label>
+                                        </object>
+                                    </object>
+                                </object>
+                            </object>
                         </object>
                     </object>
                 </object>
@@ -1285,6 +1324,45 @@
                             <item>90 minutes</item>
                             <item>120 minutes</item>
                         </content>
+                    </object>
+                </object>
+            </object>
+        </object>
+        <object class="sizeritem">
+            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT|wxTOP</flag>
+            <border>5</border>
+            <object class="wxBoxSizer">
+                <orient>wxHORIZONTAL</orient>
+                <object class="sizeritem">
+                    <flag>wxALIGN_CENTER|wxLEFT|wxRIGHT|wxTOP</flag>
+                    <border>5</border>
+                    <object class="wxStaticText" name="ID_TEXT">
+                        <font>
+                            <size>10</size>
+                            <weight>bold</weight>
+                        </font>
+                        <label>Settings</label>
+                    </object>
+                </object>
+            </object>
+        </object>
+        <object class="sizeritem">
+            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+            <border>5</border>
+            <object class="wxBoxSizer">
+                <orient>wxHORIZONTAL</orient>
+                <object class="sizeritem">
+                    <flag>wxALIGN_CENTER|wxALL</flag>
+                    <border>5</border>
+                    <object class="wxButton" name="ID_SETTINGS_EXPORT">
+                        <label>Export</label>
+                    </object>
+                </object>
+                <object class="sizeritem">
+                    <flag>wxALIGN_CENTER|wxALL</flag>
+                    <border>5</border>
+                    <object class="wxButton" name="ID_SETTINGS_IMPORT">
+                        <label>Import</label>
                     </object>
                 </object>
             </object>

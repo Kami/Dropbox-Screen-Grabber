@@ -6,6 +6,7 @@ import win32con
 import wx
 
 import screengrab
+import ConfigParser
 
 UPDATE_CHECK_URL = 'http://dl.getdropbox.com/u/521887/dropbox_screen_grabber/latest'
 
@@ -76,7 +77,37 @@ def getAutoGrabIntervalValueInMs(interval):
 	interval = (interval * 60 * 1000)
 	
 	return interval
+
+def exportSettings(filePath):
+	"""
+	Save current settings to a file.
+	"""
+	config = ConfigParser.RawConfigParser()
 	
+	config.add_section('general')
+	for key, value in settings.iteritems():
+		config.set('general', key, value)
+		
+	with open(filePath, 'wb') as file:
+		config.write(file)
+		
+def importSettings(filePath):
+	"""
+	Restore settings from a file.
+	"""
+
+	config = ConfigParser.RawConfigParser()
+	config.read(filePath)
+	
+	items = dict(config.items('general'))
+	settingsImported = dict([(k,v) for k, v in items.iteritems() \
+								if settings.has_key(k)])
+	
+	if len(settingsImported) != len(settings):
+		raise Exception('Could not parse settings file')
+	
+	saveSettings(settingsImported)
+
 def get_latest_version():
 	request = urllib2.Request(UPDATE_CHECK_URL)
 	request.add_header('User-Agent', 'Python Client - Dropbox Screen Grabber')
