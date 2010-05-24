@@ -4,7 +4,7 @@
 # Description: Simple application for capturing screenshots of the whole desktop or
 # the currently active window and saving it to the Dropbox public folder.
 # Author: Tomaž Muraus (http://www.tomaz-muraus.info)
-# Version: 1.6
+# Version: 2.0
 # License: GPL
 #
 # Requirements:
@@ -22,7 +22,7 @@
 # - Steve H. for making PythonScriptToDisplayConfig script which reads the Dropbox configuration data (http://wiki.getdropbox.com/DropboxAddons/PythonScriptToDisplayConfig)
 # - Dropbox team for making the best syncing tool
 
-__version__ = "1.6"
+__version__ = "2.0"
 
 import os
 import sys
