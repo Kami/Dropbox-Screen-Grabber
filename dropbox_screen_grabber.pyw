@@ -34,14 +34,7 @@ import wx.lib.agw.supertooltip as STT
 
 from wx import xrc
 
-try:
-	import screengrab
-except IOError:
-	# Dropbox database not found, show the error and exit the application
-	application = wx.App()
-	wx.MessageBox("No Dropbox installation detected", "Error", wx.ICON_ERROR)
-	application.MainLoop()
-	sys.exit(1)
+import screengrab
 import settings
 
 # Application name and other IDs constants
@@ -113,12 +106,12 @@ class DropboxScreenGrabberFrame(wx.Frame):
 			fileName = screengrab.grab_screenshot(True, True if settings.settings['copy_url_to_clipboard'] == '1' else False, settings.settings['user_id'])
 			
 			if (settings.settings['enable_toast_notifications']  == '1'):
-				self.showNotification(os.path.join(screengrab.publicFolderPath, fileName))
+				self.showNotification(os.path.join(screengrab.get_public_folder_path(), fileName))
 		elif eventId == ID_TAKE_SCREEN_ACTIVE:
 			fileName = screengrab.grab_screenshot(False, True if settings.settings['copy_url_to_clipboard'] == '1' else False, settings.settings['user_id'])
 			
 			if (settings.settings['enable_toast_notifications'] == '1'):
-				self.showNotification(os.path.join(screengrab.publicFolderPath, fileName))
+				self.showNotification(os.path.join(screengrab.get_public_folder_path(), fileName))
 		elif eventId == ID_UPDATE_CHECK:
 			try:
 				(version, releaseDate, downloadUrl) = settings.get_latest_version()
@@ -178,18 +171,10 @@ Available hot-keys:
 				settings.loadSettings()
 				
 				# Re-register the hot-keys
-				self.unregisterHotKeys()
-				self.registerHotKeys()
+				self.reRegisterHotKeys()
 				
-				# Timer
-				autoGrab = settingsDialog.autoGrabCheckbox.GetValue()
-				if autoGrab:
-					interval = settingsDialog.autoGrabInterval.GetValue()
-					interval = settings.getAutoGrabIntervalValueInMs(interval)
-					
-					self.timer.Start(milliseconds = interval, oneShot = False)
-				else:
-					self.timer.Stop()
+				# Restart the timer
+				self.restartTimer()
 					
 			settingsDialog.dialog.Destroy()
 		elif eventId == ID_EXIT:
@@ -224,7 +209,28 @@ Available hot-keys:
 		fileName = screengrab.grab_screenshot(fullScreen, copyUrlToClipboard, userId)
 			
 		if (settings.settings['enable_toast_notifications'] == '1'):
-			self.showNotification(os.path.join(screengrab.publicFolderPath, fileName))
+			self.showNotification(os.path.join(screengrab.get_public_folder_path(), fileName))
+			
+	def reRegisterHotKeys(self):
+		"""
+		Re-registers the hot keys.
+		"""
+		self.unregisterHotKeys()
+		self.registerHotKeys()
+		
+	def restartTimer(self):
+		"""
+		Restarts the timer.
+		"""
+		autoGrab = settings.settings['auto_grab']
+		if autoGrab == '1':
+			interval = settings.settings['auto_grab_interval']
+			interval = settings.getAutoGrabIntervalValueInMs(interval)
+			
+			self.timer.Stop()
+			self.timer.Start(milliseconds = interval, oneShot = False)
+		else:
+			self.timer.Stop()
 
 class SettingsDialog():
 	def __init__(self, parent):
@@ -277,7 +283,7 @@ class SettingsDialog():
 		self.shortenUrlsCheckbox.SetValue(True if settings.settings['shorten_urls'] == '1' else False)
 		self.notificationCheckbox.SetValue(True if settings.settings['enable_toast_notifications'] == '1' else False)
 		
-		self.screenshotSaveLocation.SetValue(os.path.join(screengrab.publicFolderPath, settings.settings['screenshot_save_directory']))
+		self.screenshotSaveLocation.SetValue(os.path.join(screengrab.get_public_folder_path(), settings.settings['screenshot_save_directory']))
 		self.imageFormat.SetStringSelection(settings.settings['image_format'])
 		self.imageQuality.Enable(True if settings.settings['image_format'] == 'JPEG' else False)
 		self.imageQuality.SetStringSelection(settings.settings['image_quality'])
@@ -336,7 +342,7 @@ class SettingsDialog():
 		directory = self.chooseSaveLocationDirectory()
 		
 		if directory != None:
-			if directory.count(screengrab.publicFolderPath) == 1:
+			if directory.count(screengrab.get_public_folder_path()) == 1:
 				self.screenshotSaveLocation.SetValue(directory)
 			else:
 				wx.MessageBox("The directory must be located inside the Dropbox Public directory", "Error", wx.ICON_ERROR)
@@ -364,10 +370,9 @@ class SettingsDialog():
 			try:
 				settings.importSettings(path)
 				self.populateDialog()
-				
-				# Re-register the hot-keys
-				self.parent.unregisterHotKeys()
-				self.parent.registerHotKeys()
+				self.parent.reRegisterHotKeys()
+				self.parent.restartTimer()
+			
 				wx.MessageBox("Settings have been successfully imported from a file %s" % (filename), "Import settings", wx.ICON_INFORMATION)
 			except Exception, e:
 				wx.MessageBox("Settings could not be imported", "Error", wx.ICON_ERROR)
@@ -378,13 +383,11 @@ class SettingsDialog():
 		if dialog.ShowModal() == wx.ID_YES:
 			settings.restoreToDefault()
 			self.populateDialog()
-			
-			# Re-register the hot-keys
-			self.parent.unregisterHotKeys()
-			self.parent.registerHotKeys()
+			self.parent.reRegisterHotKeys()
+			self.parent.restartTimer()
 			
 			wx.MessageBox("Settings have been successfully restored to default", "Restore to default", wx.ICON_INFORMATION)
-				
+
 	def OnClose(self, event):
 		self.Destroy()
 		
@@ -441,7 +444,72 @@ class DropboxScreenGrabber(wx.App):
 		DropboxScreenGrabberFrame(None, -1, APP_NAME)
 
 		return True
+	
+#try:
+#	screengrab.get_public_folder_path()
+#except IOError:
+#	# Dropbox database not found, ask user if he wants to manually set the location
+#	application = wx.App()
+#
+#	dialog = wx.MessageDialog(None, "No Dropbox installation detected, would you like to manually set the Dropbox folder location?", "Error", style = wx.YES_NO | wx.ICON_QUESTION)
+#
+#	if dialog.ShowModal() == wx.ID_YES:
+#		dialogDirectory = wx.DirDialog(None, "Please choose your Dropbox directory:", style = 1)
+#		
+#		if dialogDirectory.ShowModal() == wx.ID_OK:
+#			dropboxDirectory = dialogDirectory.GetPath()
+#			publicFolder = os.path.join(dropboxDirectory, 'Public')
+#			
+#			if not os.path.exists(publicFolder):
+#				wx.MessageBox("This directory does not contain the Dropbox \"Public\" folder", "Error", wx.ICON_ERROR)
+#				sys.exit(1)
+#				
+#			settings.saveSettings({'dropbox_directory': dropboxDirectory})
+#			wx.MessageBox("Dropbox folder has been successfully set to %s" % (dropboxDirectory), "Dropbox folder set", wx.ICON_INFORMATION)
+#		else:
+#			sys.exit(1)
+#			application.Exit()
+#	else:
+#		sys.exit(1)
+#		application.Exit()
+#		
+#	application = DropboxScreenGrabber(0)
+#	application.MainLoop()
 
 if __name__ == '__main__':
+	try:
+		screengrab.get_public_folder_path()
+	except IOError:
+		# Dropbox database not found, ask user if he wants to manually set the location
+		application = wx.App()
+	
+		dialog = wx.MessageDialog(None, "No Dropbox installation detected, would you like to manually set the Dropbox folder location?", "Error", style = wx.YES_NO | wx.ICON_QUESTION)
+	
+		if dialog.ShowModal() == wx.ID_YES:
+			dialogDirectory = wx.DirDialog(None, "Please choose your Dropbox directory:", style = 1)
+			
+			if dialogDirectory.ShowModal() == wx.ID_OK:
+				dropboxDirectory = dialogDirectory.GetPath()
+				publicFolder = os.path.join(dropboxDirectory, 'Public')
+				
+				if not os.path.exists(publicFolder):
+					wx.MessageBox("This directory does not contain the Dropbox \"Public\" folder", "Error", wx.ICON_ERROR)
+					sys.exit(1)
+					
+				settings.saveSettings({'dropbox_directory': dropboxDirectory})
+				wx.MessageBox("Dropbox folder has been successfully set to %s" % (dropboxDirectory), "Dropbox folder set", wx.ICON_INFORMATION)
+				
+				application.Exit()
+				application = None
+				
+				application = DropboxScreenGrabber(0)
+				application.MainLoop()
+			else:
+				sys.exit(1)
+				application.Exit()
+		else:
+			sys.exit(1)
+			application.Exit()
+		
 	application = DropboxScreenGrabber(0)
 	application.MainLoop()

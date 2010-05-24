@@ -94,7 +94,25 @@ def get_dropbox_path():
 		return dropbox_path
 	except Exception, e:
 		raise IOError('Problems reading the Dropbox database')
-
+	
+def get_public_folder_path():
+	try:
+		dropbox_path = get_dropbox_path()
+	except IOError:
+		# No Dropbox installation detected, check if user has manually specified location of
+		# the Dropbox directory
+		try:
+			settings.loadSettings()
+			dropbox_path = settings.settings['dropbox_directory']
+		except KeyError:
+			dropbox_path = None
+			
+		if not dropbox_path:
+			raise IOError('Could not find Dropbox folder')
+		
+	public_folder_path = os.path.join(dropbox_path, 'Public')
+	return public_folder_path
+	
 def get_current_active_window_placement():
 	"""
 	Return coordinates of the currently active window.
@@ -128,7 +146,7 @@ def grab_screenshot(fullScreen = True, copyUrlIntoClipboard = False, userId = ''
 							('png' if settings.settings['image_format'] == 'PNG' else 'jpg'))
 	
 	settings.loadSettings()
-	saveFolderPath = os.path.join(publicFolderPath, settings.settings['screenshot_save_directory'])
+	saveFolderPath = os.path.join(get_public_folder_path(), settings.settings['screenshot_save_directory'])
 	saveLocation = os.path.join(saveFolderPath, fileName)  
 	
 	# Resize the image
@@ -205,5 +223,3 @@ def shorten_url(long_url):
 	
 	url = url.strip()
 	return url
-
-publicFolderPath = os.path.join(get_dropbox_path(), 'Public')

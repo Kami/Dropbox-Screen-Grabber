@@ -12,6 +12,7 @@ UPDATE_CHECK_URL = 'http://dl.getdropbox.com/u/521887/dropbox_screen_grabber/lat
 
 settingsDefault = {
 			'user_id': '',
+			'dropbox_directory': '',
 			'copy_url_to_clipboard': '0',
 			'shorten_urls': '0',
 			'enable_toast_notifications': '1',
@@ -55,20 +56,19 @@ def loadSettings():
 def saveSettings(settingsNew):
 	config = wx.Config('dropbox_screen_grabber')
 	
-	for key, value in settingsDefault.iteritems():
-		value = settingsNew[key]
-		
+	for key, value in settingsNew.iteritems():
 		if type(value) == bool:
 			value = '1' if value else '0'
 			
 		config.Write(key, str(value))
 	
 	# Only path relative to Dropbox public directory is allowed
-	saveDirectory = settingsNew['screenshot_save_directory']
-	saveDirectory = saveDirectory[len(screengrab.publicFolderPath) + 1:] if saveDirectory.find(screengrab.publicFolderPath) != -1 and len(saveDirectory) > len(screengrab.publicFolderPath) else None
-	
-	if not saveDirectory:
-		config.Write('screenshot_save_directory', '')
+	if settingsNew.has_key('screenshot_save_directory'):
+		saveDirectory = settingsNew['screenshot_save_directory']
+		saveDirectory = saveDirectory[len(screengrab.get_public_folder_path()) + 1:] if saveDirectory.find(screengrab.get_public_folder_path()) != -1 and len(saveDirectory) > len(screengrab.get_public_folder_path()) else None
+		
+		if not saveDirectory:
+			config.Write('screenshot_save_directory', '')
 		
 def getAutoGrabIntervalValueInMs(interval):
 	"""
@@ -105,8 +105,9 @@ def importSettings(filePath):
 	settingsImported = dict([(k,v) for k, v in items.iteritems() \
 								if settingsDefault.has_key(k)])
 	
-	if len(settingsImported) != len(settingsDefault):
-		raise Exception('Could not parse settings file')
+	# Allow importing files with missing keys for backwards-compatibility
+#	if len(settingsImported) != len(settingsDefault):
+#		raise Exception('Could not parse settings file')
 	
 	saveSettings(settingsImported)
 	
