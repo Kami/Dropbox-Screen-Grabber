@@ -39,7 +39,8 @@ settings = {}
 modifiers = {
 			 'Ctrl': win32con.MOD_CONTROL,
 			 'Alt': win32con.MOD_ALT,
-			 'Shift': win32con.MOD_SHIFT
+			 'Shift': win32con.MOD_SHIFT,
+			 'Win': win32con.MOD_WIN
 			}
 keyCodes = {
 			'F10': win32con.VK_F10,

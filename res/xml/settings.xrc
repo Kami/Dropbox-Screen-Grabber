@@ -383,6 +383,7 @@
                                                                 <item>Ctrl</item>
                                                                 <item>Alt</item>
                                                                 <item>Shift</item>
+                                                                <item>Win</item>
                                                             </content>
                                                         </object>
                                                     </object>
@@ -444,6 +445,7 @@
                                                                 <item>Ctrl</item>
                                                                 <item>Alt</item>
                                                                 <item>Shift</item>
+                                                                <item>Win</item>
                                                             </content>
                                                         </object>
                                                     </object>
@@ -1081,6 +1083,7 @@
                                             <item>Ctrl</item>
                                             <item>Alt</item>
                                             <item>Shift</item>
+                                            <item>Win</item>
                                         </content>
                                     </object>
                                 </object>
@@ -1142,6 +1145,7 @@
                                             <item>Ctrl</item>
                                             <item>Alt</item>
                                             <item>Shift</item>
+                                            <item>Win</item>
                                         </content>
                                     </object>
                                 </object>
