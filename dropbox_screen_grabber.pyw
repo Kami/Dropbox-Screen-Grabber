@@ -444,37 +444,6 @@ class DropboxScreenGrabber(wx.App):
 		DropboxScreenGrabberFrame(None, -1, APP_NAME)
 
 		return True
-	
-#try:
-#	screengrab.get_public_folder_path()
-#except IOError:
-#	# Dropbox database not found, ask user if he wants to manually set the location
-#	application = wx.App()
-#
-#	dialog = wx.MessageDialog(None, "No Dropbox installation detected, would you like to manually set the Dropbox folder location?", "Error", style = wx.YES_NO | wx.ICON_QUESTION)
-#
-#	if dialog.ShowModal() == wx.ID_YES:
-#		dialogDirectory = wx.DirDialog(None, "Please choose your Dropbox directory:", style = 1)
-#		
-#		if dialogDirectory.ShowModal() == wx.ID_OK:
-#			dropboxDirectory = dialogDirectory.GetPath()
-#			publicFolder = os.path.join(dropboxDirectory, 'Public')
-#			
-#			if not os.path.exists(publicFolder):
-#				wx.MessageBox("This directory does not contain the Dropbox \"Public\" folder", "Error", wx.ICON_ERROR)
-#				sys.exit(1)
-#				
-#			settings.saveSettings({'dropbox_directory': dropboxDirectory})
-#			wx.MessageBox("Dropbox folder has been successfully set to %s" % (dropboxDirectory), "Dropbox folder set", wx.ICON_INFORMATION)
-#		else:
-#			sys.exit(1)
-#			application.Exit()
-#	else:
-#		sys.exit(1)
-#		application.Exit()
-#		
-#	application = DropboxScreenGrabber(0)
-#	application.MainLoop()
 
 if __name__ == '__main__':
 	try:
@@ -505,11 +474,11 @@ if __name__ == '__main__':
 				application = DropboxScreenGrabber(0)
 				application.MainLoop()
 			else:
-				sys.exit(1)
 				application.Exit()
+				sys.exit(1)
 		else:
-			sys.exit(1)
 			application.Exit()
+			sys.exit(1)
 		
 	application = DropboxScreenGrabber(0)
 	application.MainLoop()
