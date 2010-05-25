@@ -1,3 +1,11 @@
+Dropbox Screen Grabber 2.0 - (24.05.2010)
+
+* Added ability to automatically grab screenshots at defined time intervals
+* Added ability to export and import settings
+* Added ability to restore settings to default
+* If Dropbox installation cannot be detected automatically, user can now manually set the location of the "My Dropbox" folder
+* New taskbar menu icons
+
 Dropbox Screen Grabber 1.6 - (22.05.2010)
 
 * Fixed the application / taskbar icon title issue
