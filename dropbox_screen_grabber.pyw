@@ -83,9 +83,9 @@ class DropboxScreenGrabberFrame(wx.Frame):
 		self.Bind(wx.EVT_CLOSE, self.OnCloseWindow)
 		
 	def registerHotKeys(self):
-		self.RegisterHotKey(ID_HOT_KEY_FULL, settings.modifiers[settings.settings['hot_key1_modifier']], settings.keyCodes[settings.settings['hot_key1_key_code']])  # Shift + F10
-		self.RegisterHotKey(ID_HOT_KEY_ACTIVE, settings.modifiers[settings.settings['hot_key2_modifier']], settings.keyCodes[settings.settings['hot_key2_key_code']])  # Shift + F11
-		
+		self.RegisterHotKey(ID_HOT_KEY_FULL, settings.modifiers[settings.settings['hot_key1_modifier']], settings.keyCodes[settings.settings['hot_key1_key_code']])
+		self.RegisterHotKey(ID_HOT_KEY_ACTIVE, settings.modifiers[settings.settings['hot_key2_modifier']], settings.keyCodes[settings.settings['hot_key2_key_code']])
+
 		# Bind the hot-key events
 		self.Bind(wx.EVT_HOTKEY, self.handleMenuAndHotKeyEvents, id = ID_TAKE_SCREEN_FULL)
 		self.Bind(wx.EVT_HOTKEY, self.handleMenuAndHotKeyEvents, id = ID_TAKE_SCREEN_ACTIVE)
