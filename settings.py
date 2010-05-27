@@ -66,10 +66,12 @@ def saveSettings(settingsNew):
 	# Only path relative to Dropbox public directory is allowed
 	if settingsNew.has_key('screenshot_save_directory'):
 		saveDirectory = settingsNew['screenshot_save_directory']
-		saveDirectory = saveDirectory[len(screengrab.get_public_folder_path()) + 1:] if saveDirectory.find(screengrab.get_public_folder_path()) != -1 and len(saveDirectory) > len(screengrab.get_public_folder_path()) else None
+		saveDirectory = saveDirectory[len(screengrab.get_public_folder_path()) + 1:] if (saveDirectory.find(screengrab.get_public_folder_path()) != -1 and len(saveDirectory) > len(screengrab.get_public_folder_path())) else None
 		
 		if not saveDirectory:
 			config.Write('screenshot_save_directory', '')
+		else:
+			config.Write('screenshot_save_directory', saveDirectory)
 		
 def getAutoGrabIntervalValueInMs(interval):
 	"""
