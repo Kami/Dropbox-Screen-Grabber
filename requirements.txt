@@ -1,0 +1,3 @@
+ PIL
+ pywin32
+ wxPython
