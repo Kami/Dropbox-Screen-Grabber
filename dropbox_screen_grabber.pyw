@@ -3,7 +3,7 @@
 # Name: Dropbox Screen Grabber
 # Description: Simple application for capturing screenshots of the whole desktop or
 # the currently active window and saving it to the Dropbox public folder.
-# Author: Tomaž Muraus (http://www.tomaz-muraus.info)
+# Author: Tomaž Muraus (http://www.tomaz.me)
 # Version: 2.1
 # License: GPL
 #
@@ -142,7 +142,7 @@ Available hot-keys:
 			info.SetName(APP_NAME)
 			info.SetVersion(__version__)
 			info.SetDescription(description)
-			info.AddDeveloper('Tomaz Muraus - http://www.tomaz-muraus.info')
+			info.AddDeveloper('Tomaz Muraus - http://www.tomaz.me')
 			wx.AboutBox(info)
 		elif eventId == ID_SETTINGS:
 			settingsDialog = SettingsDialog(self)
